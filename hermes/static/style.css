@@ -1,0 +1,15 @@
+/**{
+    border: solid lime 1px;
+}
+*/
+html {
+    font-family: "Open Sans";
+}
+
+.content{
+    margin-top:56px;
+}
+
+.toolbar{
+    margin-bottom: 8px;
+}

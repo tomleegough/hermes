@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block toolbar %}
+    <a class="btn btn-outline-dark" role="button" href="{{ url_for('transactions.add_transaction') }}">Add</a>
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %}Transactions{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+    <table class="table table-bordered table-hover table-sm">
+        <tr class="thead-dark">
+            <th>Date</th>
+            <th>Description</th>
+            <th>Code</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Actions</th>
+        </tr>
+
+    {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction['trans_date'] }}</td>
+            <td>{{ transaction['trans_desc'] }}</td>
+            <td>{{ transaction['accounts_code'] }}</td>
+            <td class="text-right">{{ "{:,.2f}".format(transaction['debit']) }}</td>
+            <td class="text-right">{{ "{:,.2f}".format(transaction['credit']) }}</td>
+            <td><a href="{{ url_for('transactions.view', code=transaction['accounts_code']) }}">View</a></td>
+        </tr>
+    {% endfor %}
+
+    </table>
+{% endblock %}

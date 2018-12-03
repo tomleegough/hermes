@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block toolbar %}
+    <a class="btn btn-outline-dark" role="button" href="{{ url_for('reports.income')}}">Income Statement</a>
+    <a class="btn btn-outline-dark" role="button" href="{{ url_for('reports.balance')}}">Balance Sheet</a>
+{% endblock %}
+
+{% block header %}
+  <h1>{% block title %}Reports{% endblock %}</h1>
+{% endblock %}

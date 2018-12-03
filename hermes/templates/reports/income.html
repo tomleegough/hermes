@@ -1,0 +1,28 @@
+{% extends 'reports/reports.html' %}
+
+{% block content %}
+
+<h2>Income Statement</h2>
+
+
+<table class="table table-bordered table-hover table-sm">
+    <tr class="thead-dark">
+        <th>Account Code</th>
+        <th>Account Name</th>
+        <th>Value</th>
+    </tr>
+
+    {% for account in accounts %}
+    <tr>
+        <td>{{ account['accounts_code'] }}</td>
+        <td>{{ account['accounts_name'] }}</td>
+        <td class="text-right">{{ "{:,.2f}".format(account['sum(splits_value)'] * -1) }}</td>
+    </tr>
+    {% endfor %}
+
+    <tr class="table-secondary">
+        <td colspan="2"><strong>TOTAL</strong></td>
+        <td class="text-right"><strong>{{ "{:,.2f}".format(total) }}</strong></td>
+</table>
+
+{% endblock %}
