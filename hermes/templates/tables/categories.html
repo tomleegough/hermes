@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Categories{% endblock %}</h1>
+{% endblock %}
+
+{% block toolbar %}
+    <div class="mb-2">
+        <a role="button" class="btn btn-outline-primary" href="{{ url_for('settings.category', action='add') }}">Add new</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <table class="table table-sm table-striped">
+        <tr class="thead-light">
+            <th>Category</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+
+        {% if categories == [] %}
+        <tr>
+            <td colspan="4">Add categories</td>
+        </tr>
+        {% endif %}
+
+        {% for category in categories %}
+        <tr>
+            <td><a href="{{ url_for('settings.category', action='edit', cat_id=category['category_id'])}}">{{ category['category_name'] }}</td>
+            <td>
+                <a class="pl-0 dropdown-item" href="{{ url_for('settings.category_change_status', cat_id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
+                    {% if category['category_enabled_flag'] == 1 %}
+                    <span class="badge badge-success">Active</span>
+                    {% else %}
+                    <span class="badge badge-danger">Disabled</span>
+                    {% endif %}
+                </a>
+            </td>
+            <td>{{ category['cat_type_name'] }}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-secondary dropdown-toggle" id="{{category['category_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    select action</button>
+                    <div class="dropdown-menu" aria-labelledby="{{category['category_id']}}">
+                        <a class="dropdown-item" href="{{ url_for('settings.category', action='edit', cat_id=category['category_id'])}}">Edit</a>
+                        <a class="dropdown-item" href="{{ url_for('settings.category_change_status', cat_id=category['category_id'], status_flag=category['category_enabled_flag'])}}">Change Status</a>
+                    </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
