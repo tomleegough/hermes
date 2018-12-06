@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Organisations{% endblock %}</h1>
+{% endblock %}
+
+{% block toolbar %}
+    <div class="mb-2">
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('settings.organisation', action='add') }}">Add new</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <table class="table table-sm table-striped">
+        <tr class="thead-light">
+            <th>Organisation</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+
+        {% if organisation == [] %}
+        <tr>
+            <td colspan="4">Add organisations</td>
+        </tr>
+        {% endif %}
+
+        {% for org in organisations %}
+        <tr>
+            <td><a href="#">{{ org['org_name'] }}</td>
+            <td>
+                <a class="pl-0 dropdown-item" href="{{ url_for('settings.change_status', item='organisations', id=org['org_id'], status_flag=org['org_enabled_flag'])}}">
+                    {% if org['org_enabled_flag'] == 1 %}
+                    <span class="badge badge-success">Active</span>
+                    {% else %}
+                    <span class="badge badge-danger">Disabled</span>
+                    {% endif %}
+                </a>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-dark dropdown-toggle" id="{{org['org_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    select action</button>
+                    <div class="dropdown-menu" aria-labelledby="{{org['org_id']}}">
+                        <a class="dropdown-item" href="{{ url_for('settings.organisation', action='edit', org_id=org['org_id']) }}">Edit</a>
+                        <a class="dropdown-item" href="{{ url_for('settings.change_status', item='organisations', id=org['org_id'], status_flag=org['org_enabled_flag'])}}">Change Status</a>
+                    </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
