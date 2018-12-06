@@ -122,3 +122,39 @@ def logout():
 
     session.clear()
     return redirect(url_for('index'))
+
+
+@bp.route('/change', methods=['GET', 'POST'])
+def change_pass():
+    db = get_db()
+
+    if request.method == 'POST':
+
+        user = db.execute(
+            'SELECT * FROM user WHERE user_id = ?', (session['user_id'],)
+        ).fetchone()
+
+        username = user['user_name']
+        password = user['user_pass']
+        old_pass = request.form['old_password']
+        new_pass = request.form['new_password']
+        conf_pass = request.form['confirm_password']
+
+        if new_pass != conf_pass:
+            error = 'Passwords do not match'
+        if old_pass is None or new_pass is None or conf_pass is None:
+            error = 'Password cannot be blank'
+        if not check_password_hash(old_pass, password):
+            error = 'Incorrect password.'
+
+        if error is not None:
+            db.execute(
+                'UPDATE user'
+                ' SET user_pass = ?'
+                ' WHERE user_name = ?',
+                (generate_password_hash(new_pass), username,)
+            )
+
+            db.commit()
+
+    return render_template('auth/change.html')

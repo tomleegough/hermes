@@ -6,7 +6,7 @@
 
 {% block toolbar %}
     <div class="mb-2">
-        <a role="button" class="btn btn-outline-primary" href="{{ url_for('settings.category', action='add') }}">Add new</a>
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('settings.category', action='add') }}">Add new</a>
     </div>
 {% endblock %}
 
@@ -30,7 +30,7 @@
         <tr>
             <td><a href="{{ url_for('settings.category', action='edit', cat_id=category['category_id'])}}">{{ category['category_name'] }}</td>
             <td>
-                <a class="pl-0 dropdown-item" href="{{ url_for('settings.category_change_status', cat_id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
+                <a class="pl-0 dropdown-item" href="{{ url_for('settings.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
                     {% if category['category_enabled_flag'] == 1 %}
                     <span class="badge badge-success">Active</span>
                     {% else %}
@@ -41,11 +41,11 @@
             <td>{{ category['cat_type_name'] }}</td>
             <td>
                 <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle" id="{{category['category_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-sm btn-dark dropdown-toggle" id="{{category['category_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     select action</button>
                     <div class="dropdown-menu" aria-labelledby="{{category['category_id']}}">
                         <a class="dropdown-item" href="{{ url_for('settings.category', action='edit', cat_id=category['category_id'])}}">Edit</a>
-                        <a class="dropdown-item" href="{{ url_for('settings.category_change_status', cat_id=category['category_id'], status_flag=category['category_enabled_flag'])}}">Change Status</a>
+                        <a class="dropdown-item" href="{{ url_for('settings.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">Change Status</a>
                     </div>
             </td>
         </tr>
