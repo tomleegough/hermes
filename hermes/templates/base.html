@@ -8,6 +8,7 @@
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
 
 
     </head>
@@ -17,13 +18,13 @@
             <a class="navbar-brand" href="{{ url_for('index') }}">Hermes Accounting</a>
 
             {% if g.user != None %} 
-            <ul class="nav">
+            <ul class="nav d-none d-md-flex">
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-light">Dashboard</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">Organisations</a>
                     <div class="dropdown-menu">
                         {% for org in session['orgs'] %}
-                            <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-dark text-light{% endif %}" href="{{ url_for('settings.change_org', org_id=org['org_id']) }}">{{org['org_name']}}</a>
+                            <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-dark text-light{% endif %}" href="{{ url_for('settings.change_org', org_id=org['org_id'], return_url='d')}}">{{org['org_name']}}</a>
                         {% endfor %}
                         <div class="dropdown-divider"></div>
                         <a class="nav-link dropdown-item" href="{{ url_for('settings.organisation', action='add')}}">Create new</a>
@@ -51,29 +52,26 @@
                 </li>
                 <li class="nav-item"><a class="nav-link text-light" href="{{ url_for('auth.logout') }}">Logout</a></li>
             </ul>
+
+            <div class="d-md-none">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+                <div class="dropdown-menu col justify-content-right" id="navbarSupportedContent">
+                    <a href="{{ url_for('index') }}" class="nav-link text-dark">Dashboard</a>
+                    <a class="nav-link text-dark" href="{{ url_for('settings.show_organisations') }}">Organisations</a>
+                    <a class="nav-link text-dark" href="#">Some Link</a>
+                    <a class="nav-link text-dark" href="#">Some Link</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">Logout</a>
+                </div>              
+            </div>
             {% endif %}
         </nav>
 
         <div class="container-fluid">
             <div class="row">
-                {% if g.user != None %}
-                <div class="container col-2 d-none">
-                    <nav class="container col-2 sidebar">
-                        <div class="sidebar-sticky">
-                            <ul class="nav flex-column mt-4">
-                                <li class="nav-item"><a href="#" class="nav-link active">Link</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-                {% endif %}
-
-                <main role="main" class="mx-auto mt-3 container col-10">
+                <main role="main" class="mx-auto container">
 
                     <header>
                         {% block header %}{% endblock %}

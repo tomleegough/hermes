@@ -1,0 +1,13 @@
+{
+  "background_color": "red",
+  "description": "Grade 36 Accounting Program",
+  "display": "fullscreen",
+  "icons": [{
+    "src": "hermes.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "name": "Hermes Accountings",
+  "short_name": "Hermes",
+  "start_url": "/"
+}

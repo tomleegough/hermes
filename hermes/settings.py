@@ -192,7 +192,10 @@ def organisation(action, org_id):
     return render_template('forms/org.html', org=org, action=action)
 
 
-@bp.route('/organisation/<org_id>')
-def change_org(org_id):
+@bp.route('/organisation/<return_url>/<org_id>')
+def change_org(org_id, return_url):
     session['current_org'] = org_id
-    return redirect(url_for('accounts.index'))
+    if return_url == 'o':
+        return redirect(url_for('settings.show_organisations'))
+    else:
+        return redirect(url_for('accounts.index'))
