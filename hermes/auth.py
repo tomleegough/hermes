@@ -87,9 +87,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = 'Incorrect username.'
+            error = 'Incorrect username or password.'
         elif not check_password_hash(user['user_pass'], password):
-            error = 'Incorrect password.'
+            error = 'Incorrect username or password.'
 
         if error is None:
             # store the user id in a new session and return to the index
@@ -99,7 +99,7 @@ def login():
             session['current_org'] = user['user_last_org_id']
 
             return redirect(url_for('index'))
-
+        
         flash(error)
 
     return render_template('auth/login.html')

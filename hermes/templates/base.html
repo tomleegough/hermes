@@ -19,6 +19,12 @@
 
             {% if g.user != None %} 
             <ul class="nav d-none d-md-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false"> + </a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link dropdown-item" href="{{ url_for('banking.transaction', action='add') }}">Bank Transaction</a>
+                    </div>
+                </li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-light">Dashboard</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">Organisations</a>
@@ -55,13 +61,12 @@
 
             <div class="d-md-none">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
                 <div class="dropdown-menu col justify-content-right" id="navbarSupportedContent">
                     <a href="{{ url_for('index') }}" class="nav-link text-dark">Dashboard</a>
                     <a class="nav-link text-dark" href="{{ url_for('settings.show_organisations') }}">Organisations</a>
-                    <a class="nav-link text-dark" href="#">Some Link</a>
-                    <a class="nav-link text-dark" href="#">Some Link</a>
                     <div class="dropdown-divider"></div>
                     <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">Logout</a>
                 </div>              

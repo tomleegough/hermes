@@ -15,12 +15,20 @@ bp = Blueprint('banking', __name__, url_prefix='/bank')
 def show_accounts():
     db = get_db()
 
+    today = datetime.now().strftime('%Y-%m-%d')
+
     accounts = db.execute(
-        'SELECT * FROM bank WHERE org_id_fk=?',
+        'SELECT bank_id, bank_name, bank_reference,'
+        ' bank_enabled_flag, bank_currency_code,'
+        ' sum(trans_value) as "bank_balance"'
+        ' FROM bank'
+        ' LEFT JOIN transactions on bank_id = bank_id_fk'
+        ' WHERE bank.org_id_fk=?'
+        ' GROUP BY bank_id',
         (session['current_org'],)
     ).fetchall()
 
-    return render_template('tables/accounts.html', accounts=accounts)
+    return render_template('blocks/accounts.html', accounts=accounts)
 
 
 @bp.route('/<action>/', defaults={'bank_id': ''}, methods=['POST', 'GET'])
@@ -82,4 +90,66 @@ def account(action, bank_id):
         (bank_id,)
     ).fetchone()
 
-    return render_template('forms/account.html', account=account, action=action)
+    return render_template(
+        'forms/account.html',
+        account=account,
+        action=action
+    )
+
+
+@bp.route('/transaction/<action>/', defaults={'bank_id': ''}, methods=['POST', 'GET'])
+@bp.route('/transaction/<action>/<bank_id>/', methods=['POST', 'GET'])
+@login_required
+def transaction(action, bank_id):
+
+    db = get_db()
+
+    categories = db.execute(
+        "SELECT * FROM categories WHERE org_id_fk = ? and category_enabled_flag = 1",
+        (session['current_org'],)
+    ).fetchall()
+
+    if action == 'add':
+        if bank_id == '':
+            accounts = db.execute(
+                'SELECT * FROM bank WHERE org_id_fk = ?',
+                (session['current_org'],)
+            ).fetchall()
+
+        if request.method == 'POST':
+            trans_post_date = request.form['trans_date']
+            trans_value = request.form['trans_value']
+            trans_description = request.form['trans_desc']
+            category_id_fk = request.form['cat_id']
+
+            trans_id = str(uuid4())
+            trans_created_date = datetime.now().strftime('%Y-%m-%d')
+            user_id_fk = session['user_id']
+            org_id_fk = session['current_org']
+
+            if bank_id == '':
+                bank_id_fk = request.form['bank_id']
+            else:
+                bank_id_fk = bank_id
+
+            db.execute(
+                'INSERT INTO transactions'
+                ' (trans_id, trans_post_date, trans_created_date,'
+                ' trans_value, trans_description, user_id_fk,'
+                ' org_id_fk, bank_id_fk, category_id_fk)'
+                ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (trans_id, trans_post_date, trans_created_date,
+                    trans_value, trans_description, user_id_fk,
+                    org_id_fk, bank_id_fk, category_id_fk,)
+            )
+
+            db.commit()
+            return redirect(url_for('banking.show_accounts'))
+
+        return render_template(
+            'forms/transaction.html',
+            action=action,
+            categories=categories,
+            accounts=accounts,
+            bank_id=bank_id
+        )

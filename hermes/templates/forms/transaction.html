@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>
+        {% block title %}
+            {% if action == 'add' %}
+                {{'Add Bank Entry'}} 
+            {% else %}
+                {{'Edit Bank Entry'}}
+            {% endif %}
+        {% endblock %}
+    </h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid row">
+        <div class="p-5 mx-auto">
+            
+            <form method="post">
+
+                {% if bank_id == '' %}
+                    <div class="form-group row">
+                        <label for="bank_id" class="col-md-4 col-form-label">Account</label>
+                        <div class="col-md-8">
+                            <select name="bank_id" class="form-control" id="bank_id">
+                                {% for account in accounts %}
+                                <option value="{{ account['bank_id'] }}">{{ account['bank_name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="form-group row">
+                    <label for="trans_date" class="col-md col-form-label">Transaction Date</label>
+                    <div class="col-md">
+                        <input name="trans_date" class="form-control" type="date" id="trans_date" value="">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="trans_desc" class="col-md-4 col-form-label">Description</label>
+                    <div class="col-md-8">
+                        <input name="trans_desc" value="" class="form-control" >
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="cat_id" class="col-md-4 col-form-label">Category</label>
+                    <div class="col-md-8">
+                        <select name="cat_id" class="form-control" id="type_id">
+                            {% for cat in categories %}
+                            <option value="{{ cat['category_id'] }}">{{ cat['category_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="trans_value" class="col-md-4 col-form-label">Value</label>
+                    <div class="col-md-8">
+                        <input name="trans_value" value="" class="form-control" type="number">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <input type="submit" class="col btn btn-dark mt-3" value="Submit Bank Entry">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

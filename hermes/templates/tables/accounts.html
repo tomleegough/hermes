@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Accounts{% endblock %}</h1>
+<h1>{% block title %}{{'Accounts'}}{% endblock %}</h1>
 {% endblock %}
 
 {% block toolbar %}
@@ -17,7 +17,7 @@
             <th>Name</th>
             <th>Account Number / IBAN</th>
             <th>Currency Code</th>
-            <th>Current Balance</th>
+            <th class="text-right pr-3">Current Balance</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -33,7 +33,7 @@
             <td><a href="{{ url_for('banking.account', action='edit', bank_id=account['bank_id'])}}">{{ account['bank_name'] }}</td>
             <td>{{ account['bank_reference'] }}</td>
             <td class="text-uppercase">{{ account['bank_currency_code'] }}</td>
-            <td>0</td>
+            <td class="text-right pr-3">{{ account['bank_balance'] }}</td>
             <td>
                 <a class="pl-0 dropdown-item" href="">
                     {% if account['bank_enabled_flag'] == 1 %}
@@ -48,7 +48,8 @@
                     <button class="btn btn-sm btn-dark dropdown-toggle" id="{{account['bank_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     select action</button>
                     <div class="dropdown-menu" aria-labelledby="{{account['bank_id']}}">
-                        <a class="dropdown-item" href="{{ url_for('banking.account', action='edit', bank_id=account['bank_id'])}}">Edit</a>
+                        <a class="dropdown-item" href="{{ url_for('banking.account', action='edit', bank_id=account['bank_id'])}}">Edit Account</a>
+                        <a class="dropdown-item" href="{{ url_for('banking.transaction', action='add', bank_id=account['bank_id'])}}">Add Entry</a>
                         <a class="dropdown-item" href="">Change Status</a>
                     </div>
             </td>

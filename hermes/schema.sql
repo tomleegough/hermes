@@ -39,8 +39,8 @@ CREATE TABLE transactions (
     trans_id TEXT PRIMARY KEY,
     trans_post_date DATE,
     trans_created_date DATE
-    trans_qty REAL,
     trans_value REAL,
+    trans_description TEXT,
     user_id_fk TEXT,
     org_id_fk TEXT,
     bank_id_fk TEXT,

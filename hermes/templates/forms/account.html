@@ -4,9 +4,9 @@
     <h1>
         {% block title %}
             {% if action == 'add' %}
-                Add New Bank Account 
+                {{'Add New Bank Account'}} 
             {% else %}
-                Edit Bank Account
+                {{'Edit Bank Account'}}
             {% endif %}
         {% endblock %}
     </h1>
@@ -19,29 +19,29 @@
             
             <form method="post">
                 <div class="form-group row">
-                    <label for="bank_name" class="col-4 col-form-label">Account Name</label>
-                    <div class="col-8">
+                    <label for="bank_name" class="col-sm-4 col-form-label">Account Name</label>
+                    <div class="col-sm-8">
                         <input name="bank_name" class="form-control" type="text" value="{{ account['bank_name'] }}" id="bank_name">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="bank_enabled_flag" class="col-4 col-form-label">Account Enabled</label>
-                    <div class="col-8">
+                    <label for="bank_enabled_flag" class="col-sm-4 col-form-label">Account Enabled</label>
+                    <div class="col-sm-8">
                         <input name="bank_enabled_flag"  value="1" class="form-control" type="checkbox" {% if account['bank_enabled_flag'] == 1 %}checked{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="bank_reference" class="col-4 col-form-label">Account Reference</label>
-                    <div class="col-8">
+                    <label for="bank_reference" class="col-sm-4 col-form-label">Account Reference</label>
+                    <div class="col-sm-8">
                         <input name="bank_reference" class="form-control" type="text" placeholder="sort-account" value="{{ account['bank_reference'] }}" id="bank_reference">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="bank_currency_code" class="col-4 col-form-label">Currency Code</label>
-                    <div class="col-8">
+                    <label for="bank_currency_code" class="col-sm-4 col-form-label">Currency Code</label>
+                    <div class="col-sm-8">
                         <select name="bank_currency_code" class="form-control" id="bank_currency_code">
                             <option value="gbp" selected>GBP</option>
                             <option value="usd">USD</option>
@@ -55,9 +55,9 @@
                         type="submit"
                         class="col btn btn-dark mt-3"
                         value="{% if action == 'add' %}
-                                Create Bank Account
+                                    {{'Create Bank Account'}}
                                {% else %}
-                                Edit Bank Account
+                                    {{'Edit Bank Account'}}
                                {% endif %}">
                 </div>
 

@@ -4,9 +4,9 @@
     <h1>
         {% block title %}
             {% if action == 'add' %}
-                Add new organisation
+                {{'Add new organisation'}}
             {% else %}
-                Edit {{ org['org_name'] }}
+                Edit org['org_name']
             {% endif %}
         {% endblock %}</h1>
             
@@ -18,8 +18,8 @@
             
             <form method="post">
                 <div class="form-group row">
-                    <label for="org_name" class="col col-form-label">Organisation Name</label>
-                    <div class="col">
+                    <label for="org_name" class="col-md col-form-label">Organisation Name</label>
+                    <div class="col-md">
                         <input name="org_name" class="form-control" type="text" id="org_name" value="{{ org['org_name'] }}">
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="form-group row">
                     <label for="org_enabled_flag" class="col col-form-label">Organisation Enabled</label>
                     <div class="col">
-                        <input name="org_enabled_flag" value="1" class="form-control" type="checkbox" {% if org['org_enabled_flag'] == 1 or action =='add' %}checked{% endif %}>
+                        <input name="org_enabled_flag" value="1" class="form-control" type="checkbox" {% if org['org_enabled_flag'] == 1 or action =='add' %}{{'checked'}}{% endif %}>
                     </div>
                 </div>
 
