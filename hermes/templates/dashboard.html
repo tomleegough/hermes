@@ -8,5 +8,46 @@
 {% endblock %}
 
 {% block content %}
+    <div class="card-deck">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Category Values</h2>
+                    <ul class="unstyled list">
+                        <li class="row">
+                            <span class="col"><strong>Category</strong></span>
+                            <span class="col text-right"><strong>Value</strong></span>
+                        </li>
+                    {% for cat in categories %}
+                        <li class="row">
+                            <span class="col">{{cat['category_name']}}</span>
+                            <span class="col text-right">{{ "{:,.2f}".format(cat['value']) }}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Bank Values</h2>
+                <table class="table table-sm table-striped">
+                    <tr class="thead-light">
+                        <th>Account</th>
+                        <th>Reference</th>
+                        <th class="text-right">Balance</th>
+                    </tr>
+                    {% for account in accounts %}
+                        <tr>
+                            <td>{{account['bank_name']}}</td>
+                            <td>{{account['bank_reference']}}</td>
+                            <td class="text-right">{{ "{:,.2f}".format(account['bank_balance']) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 
 {% endblock %}

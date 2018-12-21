@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}{{'Accounts'}}{% endblock %}</h1>
+{% endblock %}
+
+{% block toolbar %}
+    <div class="mb-2">
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('banking.account', action='add') }}">Add new</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {% if accounts == [] %}
+        <h1>Add bank accounts</h1>
+    {% else %}
+        <div class="container-fluid">
+            {% for account in accounts %}
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="bg-dark justify-content-between">
+                        <h2 class="card-title">{{account['bank_name']}}</h2>
+                        <div>
+                            <a class="btn btn-light" href="{{ url_for('banking.account', action='edit', bank_id=account['bank_id'])}}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="unstyled-list">
+                        <li class="row">
+                            <strong class="col">Reference:</strong>
+                            <span class="col">{{account['bank_reference']}}</span>
+                        </li>
+                        
+                        <li class="row">
+                            <strong class="col">Currency Code:</strong>
+                            <span class="col text-uppercase">{{account['bank_currency_code']}}</span>
+                        </li>
+
+                        <li class="row">
+                            <strong class="col">Balance:</strong>
+                            <span class="col">{{account['bank_balance']}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+{% endblock %}

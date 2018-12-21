@@ -32,9 +32,9 @@
             <td>
                 <a class="pl-0 dropdown-item" href="{{ url_for('settings.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
                     {% if category['category_enabled_flag'] == 1 %}
-                    <span class="badge badge-success">Active</span>
+                    <span class="badge badge-success"><i class="fas fa-check"></i> Active</span>
                     {% else %}
-                    <span class="badge badge-danger">Disabled</span>
+                    <span class="badge badge-danger"><i class="fas fa-times"></i> Disabled</span>
                     {% endif %}
                 </a>
             </td>
@@ -42,7 +42,7 @@
             <td>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-dark dropdown-toggle" id="{{category['category_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    select action</button>
+                    action</button>
                     <div class="dropdown-menu" aria-labelledby="{{category['category_id']}}">
                         <a class="dropdown-item" href="{{ url_for('settings.category', action='edit', cat_id=category['category_id'])}}">Edit</a>
                         <a class="dropdown-item" href="{{ url_for('settings.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">Change Status</a>

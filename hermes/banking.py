@@ -13,8 +13,12 @@ bp = Blueprint('banking', __name__, url_prefix='/bank')
 
 @bp.route('/')
 def show_accounts():
-    db = get_db()
+    accounts = bank_values()
+    return render_template('cards/accounts.html', accounts=accounts)
 
+
+def bank_values():
+    db = get_db()
     today = datetime.now().strftime('%Y-%m-%d')
 
     accounts = db.execute(
@@ -28,7 +32,7 @@ def show_accounts():
         (session['current_org'],)
     ).fetchall()
 
-    return render_template('blocks/accounts.html', accounts=accounts)
+    return accounts
 
 
 @bp.route('/<action>/', defaults={'bank_id': ''}, methods=['POST', 'GET'])
