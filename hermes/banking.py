@@ -55,7 +55,6 @@ def account(action, bank_id):
         bank_id = str(uuid4())
         org_id_fk = session['current_org']
 
-
         db.execute(
             'INSERT INTO bank (bank_id, bank_name, bank_reference,'
             ' bank_created_date, bank_created_date, bank_enabled_flag,'

@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS transactions;
 CREATE TABLE transactions (
     trans_id TEXT PRIMARY KEY,
     trans_post_date DATE,
-    trans_created_date DATE
+    trans_created_date DATE,
     trans_value REAL,
     trans_description TEXT,
     user_id_fk TEXT,
