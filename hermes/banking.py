@@ -139,7 +139,7 @@ def transaction(action, bank_id):
 
         if request.method == 'POST':
             trans_post_date = request.form['trans_date']
-            trans_value = request.form['trans_value']
+            trans_value = request.form['trans_value'] * request.form['sign']
             trans_description = request.form['trans_desc']
             category_id_fk = request.form['cat_id']
 

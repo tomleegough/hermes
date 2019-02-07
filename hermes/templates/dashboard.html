@@ -18,7 +18,7 @@
                             <span class="col text-right"><strong>Value</strong></span>
                         </li>
                     {% for cat in categories %}
-                        <li class="row">
+                        <li class="row {% if cat['value'] < 0 %} text-danger {% endif %}">
                             <span class="col">{{cat['category_name']}}</span>
                             <span class="col text-right">{{ "{:,.2f}".format(cat['value']) }}</span>
                         </li>
@@ -34,12 +34,14 @@
                     <tr class="thead-light">
                         <th>Account</th>
                         <th>Reference</th>
+                        <th>Currency</th>
                         <th class="text-right">Balance</th>
                     </tr>
                     {% for account in accounts %}
-                        <tr>
+                        <tr {% if account['bank_balance'] < 0 %}class="text-danger" {% endif %}>
                             <td>{{account['bank_name']}}</td>
                             <td>{{account['bank_reference']}}</td>
+                            <td class="text-uppercase"> {{account['bank_currency_code']}}</td>
                             <td class="text-right">{{ "{:,.2f}".format(account['bank_balance']) }}</td>
                         </tr>
                     {% endfor %}

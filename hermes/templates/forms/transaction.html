@@ -42,14 +42,14 @@
                 <div class="form-group row">
                     <label for="trans_desc" class="col-md-4 col-form-label">Description</label>
                     <div class="col-md-8">
-                        <input name="trans_desc" value="" class="form-control" >
+                        <input id="trans_desc" name="trans_desc" value="" class="form-control" >
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="cat_id" class="col-md-4 col-form-label">Category</label>
                     <div class="col-md-8">
-                        <select name="cat_id" class="form-control" id="type_id">
+                        <select name="cat_id" class="form-control" id="cat_id">
                             {% for cat in categories %}
                             <option value="{{ cat['category_id'] }}">{{ cat['category_name'] }}</option>
                             {% endfor %}
@@ -58,9 +58,19 @@
                 </div>
 
                 <div class="form-group row">
+                    <label for="sign" class="col-md-4 col-form-label">Spend / Receive</label>
+                    <div class="col-md-8">
+                        <select name="sign" class="form-control" id="sign">
+                            <option value="1">Receive</option>
+                            <option value="-11">Receive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label for="trans_value" class="col-md-4 col-form-label">Value</label>
                     <div class="col-md-8">
-                        <input name="trans_value" value="" class="form-control" type="number">
+                        <input id="trans_value" name="trans_value" value="" class="form-control" type="number" step="0.01" min="0.01">
                     </div>
                 </div>
 
