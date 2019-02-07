@@ -28,7 +28,7 @@
                 <div class="form-group row">
                     <label for="bank_enabled_flag" class="col-sm-4 col-form-label">Account Enabled</label>
                     <div class="col-sm-8">
-                        <input name="bank_enabled_flag"  value="1" class="form-control" type="checkbox" {% if account['bank_enabled_flag'] == 1 %}checked{% endif %}>
+                        <input id="bank_enabled_flag" name="bank_enabled_flag"  value="1" class="form-control" type="checkbox" {% if account['bank_enabled_flag'] == 1 %}checked{% endif %}>
                     </div>
                 </div>
 
@@ -36,6 +36,20 @@
                     <label for="bank_reference" class="col-sm-4 col-form-label">Account Reference</label>
                     <div class="col-sm-8">
                         <input name="bank_reference" class="form-control" type="text" placeholder="sort-account" value="{{ account['bank_reference'] }}" id="bank_reference">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="open_balance" class="col-sm-4 col-form-label">Opening Balance</label>
+                    <div class="col-sm-8">
+                        <input name="open_balance" class="form-control" type="number" id="open_balance" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="open_date" class="col-sm-4 col-form-label">Opening Date</label>
+                    <div class="col-sm-8">
+                        <input name="open_date" class="form-control" type="date" id="open_date" required>
                     </div>
                 </div>
 

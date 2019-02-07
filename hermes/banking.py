@@ -65,6 +65,24 @@ def account(action, bank_id):
                 bank_currency_code, org_id_fk,)
         )
 
+        trans_id = str(uuid4())
+        trans_description = 'Opening Balance'
+        trans_created_date = datetime.now().strftime('%Y-%m-%d')
+        user_id_fk = session['user_id']
+        trans_post_date = request.form['open_date']
+        trans_value = request.form['open_balance']
+
+        db.execute(
+            'INSERT INTO transactions'
+            ' (trans_id, trans_post_date, trans_created_date,'
+            ' trans_value, trans_description, user_id_fk,'
+            ' org_id_fk, bank_id_fk)'
+            ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            (trans_id, trans_post_date, trans_created_date,
+             trans_value, trans_description, user_id_fk,
+             org_id_fk, bank_id,)
+        )
+
         db.commit()
 
         return redirect(url_for('banking.show_accounts'))
