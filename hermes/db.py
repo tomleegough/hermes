@@ -72,14 +72,12 @@ def init_db_command():
     click.echo('Initialized the database.')
 
 
+# Generate test data for use in  Hermes
 @click.command('generate-data')
 @with_appcontext
 def generate_test_data():
+
     db = get_db()
-
-    tables = [
-
-    ]
 
     org_id = str(uuid4())
     user_id = str(uuid4())
