@@ -7,6 +7,7 @@ from datetime import datetime
 
 from hermes.auth import login_required
 from hermes.db import get_db
+import hermes.queries as queries
 
 bp = Blueprint('banking', __name__, url_prefix='/bank')
 
@@ -19,7 +20,6 @@ def show_accounts():
 
 def bank_values():
     db = get_db()
-    today = datetime.now().strftime('%Y-%m-%d')
 
     accounts = db.execute(
         'SELECT bank_id, bank_name, bank_reference,'
