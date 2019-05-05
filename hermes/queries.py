@@ -28,3 +28,13 @@ def category_values():
     ).fetchall()
 
     return values
+
+def get_transactions_for_category(category):
+    db = get_db()
+
+    transactions = db.execute(
+        'SELECT * FROM transactions WHERE org_id_fk = ? and caegory_if_fk = ?',
+        (session['current_org'], category)
+    ).fetchall()
+
+    return transactions
