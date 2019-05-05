@@ -50,15 +50,87 @@ def init_db():
     )
 
     cat_types = [
-        (str(uuid4()), 'Income'),
-        (str(uuid4()), 'Expense')
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Fixed Assets',
+            'cat_type_order': 1
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Current Assets',
+            'cat_type_order': 2
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Current Liabilities',
+            'cat_type_order': 3
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Long-term Liabilities',
+            'cat_type_order': 4
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Income',
+            'cat_type_order': 5
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Expense',
+            'cat_type_order': 6
+        }
     ]
 
     for cat_type in cat_types:
         db.execute(
-            'INSERT INTO category_type (cat_type_id, cat_type_name)'
-            ' VALUES (?, ?)',
-            cat_type
+            'INSERT INTO category_type (cat_type_id, cat_type_name, cat_type_order)'
+            ' VALUES (?, ?, ?)',
+            (cat_type['cat_type_id'], cat_type['cat_type_name'], cat_type['cat_type_order'])
+        )
+
+    vat_types = [
+        {
+            'vat_type_id': str(uuid4()),
+            'vat_type_name': 'Zero Rated',
+            'vat_type_rate': 0,
+            'vat_type_rtn_inc': 1
+        },
+
+        {
+            'vat_type_id': str(uuid4()),
+            'vat_type_name': 'Reduced Rate',
+            'vat_type_rate': 0.05,
+            'vat_type_rtn_inc': 1
+        },
+
+        {
+            'vat_type_id': str(uuid4()),
+            'vat_type_name': 'Standard Rate',
+            'vat_type_rate': 0.2,
+            'vat_type_rtn_inc': 1
+        },
+
+        {
+            'vat_type_id': str(uuid4()),
+            'vat_type_name': 'Exempt',
+            'vat_type_rate': 0,
+            'vat_type_rtn_inc': 1
+        },
+
+        {
+            'vat_type_id': str(uuid4()),
+            'vat_type_name': 'Out of Scape',
+            'vat_type_rate': 0,
+            'vat_type_rtn_inc': 0
+        }
+    ]
+
+    for vat_type in vat_types:
+        db.execute(
+            'INSERT INTO vat_type( vat_type_id, vat_type_name, vat_type_rate, vat_type_rtn_inc) VALUES (?, ?, ?, ?)',
+            (vat_type['vat_type_id'], vat_type['vat_type_name'],
+             vat_type['vat_type_rate'], vat_type['vat_type_rtn_inc'])
         )
 
     db.commit()
@@ -270,8 +342,12 @@ def generate_test_data():
                 trans_date = datetime.datetime.today() - datetime.timedelta(days=delta)
                 trans_date = datetime.datetime.strftime(trans_date, '%Y-%m-%d')
 
+                type = 1
+                if category['cat_type_id_fk'] == expense:
+                    type = -0.25
+
                 multiplier = random.randrange(10, 100)
-                value = round( random.random() * multiplier)
+                value = round( random.random() * multiplier * type, 2)
 
                 today = datetime.datetime.strftime(datetime.datetime.today(), '%Y-%m-%d')
 

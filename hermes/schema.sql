@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS organisation;
 CREATE TABLE organisation (
     org_id TEXT PRIMARY KEY,
     org_name TEXT,
+    org_vat TEXT,
     org_enabled_flag INTEGER
 );
 
@@ -44,7 +45,10 @@ CREATE TABLE transactions (
     user_id_fk TEXT,
     org_id_fk TEXT,
     bank_id_fk TEXT,
-    category_id_fk TEXT
+    category_id_fk TEXT,
+    vat_rtn_id_fk TEXT,
+    vat_type_id_fk TEXT
+
 );
 
 DROP TABLE IF EXISTS categories;
@@ -59,5 +63,21 @@ CREATE TABLE categories(
 DROP TABLE IF EXISTS category_type;
 CREATE TABLE category_type(
     cat_type_id TEXT PRIMARY KEY,
-    cat_type_name TEXT
+    cat_type_name TEXT,
+    cat_type_order INTEGER
+);
+
+DROP TABLE IF EXISTS vat_type;
+CREATE TABLE vat_type(
+    vat_type_id TEXT,
+    vat_type_name TEXT,
+    vat_type_rate INTEGER,
+    vat_type_rtn_inc INTEGER
+);
+
+DROP TABLE IF EXISTS vat_rtn;
+CREATE TABLE vat_rtn(
+    vat_rtn_id TEXT,
+    vat_rtn_start TEXT,
+    vat_rtn_end TEXT
 );
