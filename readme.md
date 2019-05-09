@@ -1,3 +1,4 @@
 # HERMES ACCOUNTING
 
-Hermes is an accounting program writted in Flask.
+Hermes is an accounting program written in Flask.
+
