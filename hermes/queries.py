@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session
+    Blueprint, g, request, session
 )
 
 from hermes.db import get_db
@@ -34,7 +34,7 @@ def category_values_for_current_org():
         ' ORDER BY'
         '   value DESC',
         (
-            session['current_org']
+            session['current_org'],
         )
     ).fetchall()
 
@@ -236,7 +236,7 @@ def get_active_orgs_for_current_user():
         '   user_id_fk = ? and'
         '   org_enabled_flag = 1',
         (
-            session['user_id']
+            session['user_id'],
         )
     ).fetchall()
 
@@ -287,7 +287,7 @@ def add_org_permissions(user_id, org_id):
         ' )',
         (
             user_id,
-            org_id
+            org_id,
         )
     )
 
@@ -308,7 +308,7 @@ def update_organistation(form_data, org_id):
         (
             form_data['org_name'],
             form_data['org_enabled_flag'],
-            org_id
+            org_id,
         )
     )
 
@@ -354,7 +354,7 @@ def get_bank_accounts_for_current_org():
         ' GROUP BY'
         '   bank_id',
         (
-            session['current_org']
+            session['current_org'],
         )
     ).fetchall()
 

@@ -2,7 +2,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from hermes.db import get_db
 import hermes.queries as queries
 
 def update_orgs():

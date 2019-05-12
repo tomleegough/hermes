@@ -1,12 +1,9 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session
+    Blueprint, redirect, render_template, request, url_for
 )
 
-from uuid import uuid4
-from datetime import datetime
 
 from hermes.auth import login_required
-from hermes.db import get_db
 import hermes.queries as queries
 
 bp = Blueprint('banking', __name__, url_prefix='/bank')
@@ -15,7 +12,10 @@ bp = Blueprint('banking', __name__, url_prefix='/bank')
 @bp.route('/')
 def show_accounts():
     accounts = bank_values()
-    return render_template('cards/accounts.html', accounts=accounts)
+    return render_template(
+        'cards/accounts.html',
+        accounts=accounts
+    )
 
 
 @bp.route('/<action>/', defaults={'bank_id': ''}, methods=['POST', 'GET'])
@@ -25,11 +25,15 @@ def account(action, bank_id):
 
     if request.method == 'POST' and action == 'add':
         queries.create_bank_account(request.form)
-        return redirect(url_for('banking.show_accounts'))
+        return redirect(
+            url_for('banking.show_accounts')
+        )
 
     if request.method == 'POST' and action == 'edit':
         queries.update_bank_details(request.form, bank_id)
-        return redirect(url_for('banking.show_accounts'))
+        return redirect(
+            url_for('banking.show_accounts')
+        )
 
     account = queries.get_bank_account(bank_id)
 
@@ -53,7 +57,9 @@ def transaction(action, bank_id):
 
         if request.method == 'POST':
             queries.create_transaction(request.form)
-            return redirect(url_for('banking.show_accounts'))
+            return redirect(
+                url_for('banking.show_accounts')
+            )
 
         return render_template(
             'forms/transaction.html',
