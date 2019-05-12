@@ -100,7 +100,7 @@ def organisation(action, org_id):
 
     if request.method == 'POST' and action == 'edit':
         queries.update_organistation(request.form, org_id)
-        update_orgs(
+        update_orgs()
         return redirect(
             url_for('settings.show_organisations')
         )

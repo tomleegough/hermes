@@ -6,6 +6,7 @@ CREATE TABLE user (
     user_id TEXT PRIMARY KEY,
     user_name TEXT UNIQUE,
     user_pass TEXT,
+    user_email TEXT,
     user_enabled_flag INTEGER,
     user_last_org_id TEXT
     );

@@ -1,15 +1,73 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
-{% endblock %}
+{% block title %}{{"Log In"}}{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <!-- <input type="submit" value="Register"> -->
-  </form>
+    <div class="container-fluid col-md-10 col-lg-6 mx-auto">
+        <div class="p-5 mx-auto border mt-5 bg-light">
+            <h2 class="text-center">Register for Hermes Accounting!</h2>
+
+            <form method="post" class="p-md-5 mx-auto">
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i id="user-icon" class="fas fa-user"></i></span>
+                        </div>
+                        <input name="username" id="username" class="form-control" placeholder="username" aria-describedby="user-icon" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i id="user-email" class="fas fa-at"></i></span>
+                        </div>
+                        <input name="user_email" id="user_email" class="form-control" placeholder="email" aria-describedby="user-email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+
+                        <input type="password" name="password" id="password" class="form-control" placeholder="password" required>
+                    </div>
+                </div>
+
+              <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+
+                        <input type="password" name="password_verify" id="password_verify" class="form-control" placeholder="repeat password" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="mx-auto">
+                        <input type="submit" class="col btn btn-dark" value="Register">
+                    </div>
+                </div>
+
+                {% if error != '' %}
+                <div class="form-group row">
+                    <div class="col mx-auto">
+                        <p><strong>{{ error }}</strong></p>
+                    </div>
+                </div>
+                {% endif %}
+
+            </form>
+
+        </div>
+    </div>
+
 {% endblock %}
