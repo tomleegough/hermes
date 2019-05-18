@@ -20,6 +20,7 @@ def show_categories():
 
 
 @bp.route('/<item>/change-status/<id>/<status_flag>')
+@login_required
 def change_status(item, id, status_flag):
     if status_flag == '0':
         status_flag = 1
@@ -44,6 +45,7 @@ def change_status(item, id, status_flag):
 
 
 @bp.route('/<item>/create/', methods=['POST', 'GET'])
+@login_required
 def create_item(item):
     # TODO: Check that a site is selected before a category is created
     if item == 'category':
@@ -115,6 +117,7 @@ def show_organisations():
 
 
 @bp.route('/organisation/<action>/<org_id>', methods=['POST', 'GET'])
+@login_required
 def organisation(action, org_id):
     org = queries.get_org_by_id(org_id)
 
@@ -133,6 +136,7 @@ def organisation(action, org_id):
 
 
 @bp.route('/organisation/<org_id>')
+@login_required
 def change_org(org_id):
     session['current_org'] = org_id
     return redirect(
