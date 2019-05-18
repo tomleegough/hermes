@@ -54,7 +54,7 @@ def get_transactions_for_category(category_id):
         '   category_if_fk = ?',
         (
             session['current_org'],
-            category_id
+            category_id,
         )
     ).fetchall()
 
@@ -74,7 +74,7 @@ def get_all_categories_for_org():
         ' WHERE'
         '   org_id_fk = ?',
         (
-            session['current_org']
+            session['current_org'],
         )
     ).fetchall()
 
@@ -92,14 +92,14 @@ def get_category_by_id(cat_id):
         ' WHERE'
         '   category_id = ?',
         (
-            cat_id
+            cat_id,
         )
     ).fetchone()
 
     return category
 
 
-def change_category_status(status_flag, id):
+def change_category_status(status_flag, cat_id):
     db = get_db()
 
     db.execute(
@@ -111,7 +111,7 @@ def change_category_status(status_flag, id):
         '   category_id = ?',
         (
             status_flag,
-            id
+            cat_id,
         )
     )
 
@@ -130,7 +130,7 @@ def change_org_status(status_flag, org_id):
         '   org_id = ?',
         (
             status_flag,
-            org_id
+            org_id,
         )
     )
 
@@ -159,7 +159,7 @@ def create_category(form_data):
             form_data['cat_name'],
             form_data['active_flag'],
             session['current_org'],
-            form_data['type_id']
+            form_data['type_id'],
         )
     )
 
@@ -182,7 +182,7 @@ def update_category(form_data, cat_id):
             form_data['cat_name'],
             form_data['active_flag'],
             form_data['type_id'],
-            cat_id
+            cat_id,
         )
     )
 
@@ -215,7 +215,7 @@ def get_all_orgs_for_current_user():
         ' WHERE'
         '   user_id_fk = ?',
         (
-            session['user_id']
+            session['user_id'],
         )
     ).fetchall()
 
@@ -267,8 +267,10 @@ def create_organisation(form_data):
 
     add_org_permissions(
         g.user['user_id'],
-        org_id
+        org_id,
     )
+
+
 
     db.commit()
 
@@ -325,7 +327,9 @@ def get_org_by_id(org_id):
         '   organisation'
         ' WHERE'
         '   org_id = ?',
-        (org_id,)
+        (
+            org_id,
+        )
     ).fetchone()
 
     return org
@@ -391,7 +395,7 @@ def create_bank_account(form_data):
             datetime.datetime.now().strftime('%Y-%m-%d'),
             form_data['bank_enabled_flag'],
             form_data['bank_currency_code'],
-            session['current_org']
+            session['current_org'],
         )
     )
 
@@ -401,6 +405,7 @@ def create_bank_account(form_data):
         'trans_post_date': form_data['open_date'],
         'trans_description': 'Opening Balance',
         'trans_value': form_data['open_balance'],
+        'sign': 1,
         'org_id_fk': session['current_org'],
         'trans_created_date': datetime.datetime.now().strftime('%Y-%m-%d'),
         'bank_id': bank_id,
@@ -436,11 +441,11 @@ def create_transaction(trans_data):
             str(uuid4()),
             trans_data['trans_post_date'],
             trans_data['trans_created_date'],
-            request.form['trans_value'] * request.form['sign'],
+            trans_data['trans_value'] * trans_data['sign'],
             trans_data['trans_description'],
             session['user_id'],
             trans_data['org_id_fk'],
-            trans_data['bank_id']
+            trans_data['bank_id'],
         )
     )
 
@@ -457,7 +462,7 @@ def get_bank_account(bank_id):
         ' WHERE'
         '   bank_id = ?',
         (
-            bank_id
+            bank_id,
         )
     ).fetchone()
 
@@ -483,7 +488,7 @@ def update_bank_details(bank_data, bank_id):
             datetime.datetime.now().strftime('%Y-%m-%d'),
             bank_data['bank_enabled_flag'],
             bank_data['bank_currency_code'],
-            bank_id
+            bank_id,
         )
     )
 
@@ -501,8 +506,32 @@ def get_active_categories_for_current_org():
         "   org_id_fk = ? and"
         "   category_enabled_flag = 1",
         (
-            session['current_org']
+            session['current_org'],
         )
     ).fetchall()
 
     return categories
+
+
+def bank_values():
+    db = get_db()
+
+    accounts = db.execute(
+        'SELECT'
+        '  bank_id,'
+        '  bank_name,'
+        '  bank_reference,'
+        '  bank_enabled_flag,'
+        '  bank_currency_code,'
+        ' CASE'
+        '  WHEN sum(trans_value) is NULL THEN 0'
+        '  ELSE sum(trans_value)'
+        '  END AS "bank_balance"'
+        ' FROM bank'
+        ' LEFT JOIN transactions on bank_id = bank_id_fk'
+        ' WHERE bank.org_id_fk=?'
+        ' GROUP BY bank_id',
+        (session['current_org'],)
+    ).fetchall()
+
+    return accounts

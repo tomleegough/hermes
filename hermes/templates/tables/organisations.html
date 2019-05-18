@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}{{'Categories'}}{% endblock %}</h1>
+    <h1>{% block title %}{{'Organisation'}}{% endblock %}</h1>
 {% endblock %}
 
 {% block toolbar %}
     <div class="mb-2">
-        <a role="button" class="btn btn-outline-dark" href="{{ url_for('settings.category', action='add') }}">Add new</a>
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('settings.create_item', item='organisation') }}">Add new</a>
     </div>
 {% endblock %}
 
