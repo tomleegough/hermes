@@ -36,8 +36,6 @@ def change_status(item, id, status_flag):
         update_orgs()
         url = url_for('settings.show_organisations')
 
-    db.commit()
-
     return redirect(
         url
     )
@@ -49,6 +47,7 @@ def change_status(item, id, status_flag):
 def create_item(item):
     # TODO: Check that a site is selected before a category is created
     if item == 'category':
+        cat_types = queries.get_category_types()
 
         if request.method == 'POST':
             if 'active_flag' not in request.form:
@@ -60,7 +59,9 @@ def create_item(item):
 
         return render_template(
             'forms/add_edit_category.html',
-            category=''
+            category='',
+            cat_types= cat_types,
+            action='Create'
         )
 
     if item == 'organisation':

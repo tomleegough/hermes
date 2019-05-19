@@ -72,28 +72,3 @@ def create_transaction():
         categories=categories,
         accounts=accounts
     )
-
-
-@bp.route('/transaction/<action>/<bank_id>/', methods=['POST', 'GET'])
-@login_required
-def transaction(action, bank_id):
-
-    categories = queries.get_active_categories_for_current_org()
-
-    if action == 'add':
-        if bank_id == '':
-            accounts = queries.get_bank_accounts_for_current_org()
-
-        if request.method == 'POST':
-            queries.create_transaction(request.form)
-            return redirect(
-                url_for('bank.show_accounts')
-            )
-
-        return render_template(
-            'forms/transaction.html',
-            action=action,
-            categories=categories,
-            accounts=accounts,
-            bank_id=bank_id
-        )

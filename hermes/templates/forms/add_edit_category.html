@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>
-        {% block title %}
-            {% if action == 'add' %}
-                Add new
-            {% else %}
-                Edit
-            {% endif %}
-        Category
-        {% endblock %}
-    </h1>
+    <h1> {{ action }} Category </h1>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +20,7 @@
                 <div class="form-group row">
                     <label for="active_flag" class="col-4 col-form-label">Category Enabled</label>
                     <div class="col-8">
-                        <input name="active_flag"  value="1" class="form-control" type="checkbox" {% if category['category_enabled_flag'] == 1 %}checked{% endif %}>
+                        <input id='active_flag' name="active_flag"  value="1" class="form-control" type="checkbox" {% if category['category_enabled_flag'] == 1 %}checked{% endif %}>
                     </div>
                 </div>
 
@@ -43,14 +34,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <input
-                        type="submit"
-                        class="col btn btn-dark mt-3"
-                        value="{% if action == 'add' %}
-                                Create Category
-                               {% else %}
-                                Edit Category
-                               {% endif %}">
+                    <input type="submit" class="col btn btn-dark mt-3" value="{{action}} Category">
                 </div>
 
             </form>

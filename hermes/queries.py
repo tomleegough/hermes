@@ -27,11 +27,14 @@ def category_values_for_current_org():
         '   categories'
         ' LEFT JOIN'
         '   transactions on category_id_fk = category_id'
+        ' JOIN'
+        '   category_type on cat_type_id = cat_type_id_fk'
         ' WHERE'
         '   categories.org_id_fk = ?'
         ' GROUP BY'
         '   category_id'
         ' ORDER BY'
+        '   cat_type_order ASC,'
         '   value DESC',
         (
             session['current_org'],
@@ -426,8 +429,10 @@ def create_transaction(trans_data):
         '   trans_description,'
         '   user_id_fk,'
         '   org_id_fk,'
-        '   bank_id_fk'
+        '   bank_id_fk,'
+        '   category_id_fk'
         ' ) VALUES ('
+        '   ?,'
         '   ?,'
         '   ?,'
         '   ?,'
@@ -439,13 +444,14 @@ def create_transaction(trans_data):
         ')',
         (
             str(uuid4()),
-            trans_data['trans_post_date'],
-            trans_data['trans_created_date'],
-            trans_data['trans_value'] * trans_data['sign'],
-            trans_data['trans_description'],
+            trans_data['trans_date'],
+            datetime.datetime.now().strftime('%Y-%m-%d'),
+            float(trans_data['trans_value']) * float(trans_data['sign']),
+            trans_data['trans_desc'],
             session['user_id'],
-            trans_data['org_id_fk'],
+            session['current_org'],
             trans_data['bank_id'],
+            trans_data['cat_id']
         )
     )
 
