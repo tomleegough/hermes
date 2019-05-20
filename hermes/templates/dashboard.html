@@ -7,7 +7,14 @@
 {% block toolbar %}
 {% endblock %}
 
+
 {% block content %}
+    <div class="card-deck mb-4">
+        <div class="card shadow">
+            <canvas id="monthIncome"></canvas>
+        </div>
+    </div>
+
     <div class="card-deck">
         <div class="card shadow">
             <div class="card-body">
@@ -51,5 +58,26 @@
     </div>
 
 
+<script>
+var ctx = document.getElementById('monthIncome').getContext('2d');
+
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for each in chart_data %}
+                    {{ each['period']}},
+                    {% endfor %}
+        ],
+        datasets: [{
+            label: 'Income',
+            data: [{% for each in chart_data %}
+                    {{ each['value'] }},
+                    {% endfor %}
+                ],
+            borderWidth: 1
+        }]
+    }
+});
+</script>
 
 {% endblock %}

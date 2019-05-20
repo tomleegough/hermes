@@ -537,7 +537,42 @@ def bank_values():
         ' LEFT JOIN transactions on bank_id = bank_id_fk'
         ' WHERE bank.org_id_fk=?'
         ' GROUP BY bank_id',
-        (session['current_org'],)
+        (
+            session['current_org'],
+        )
     ).fetchall()
 
     return accounts
+
+def dashboard_graph():
+    db = get_db()
+
+    from_date = datetime.datetime.now() - datetime.timedelta(days=365)
+    from_date = datetime.datetime.strftime(from_date, '%Y-%m-%d')
+
+    values = db.execute(
+        'SELECT'
+        '   strftime("%Y-%m", trans_post_date) as period,'
+        '   sum(trans_value) as value'
+        ' FROM'
+        '   transactions'
+        ' JOIN'
+        '   categories on category_id = category_id_fk'
+        ' JOIN'
+        '   category_type on cat_type_id = cat_type_id_fk'
+        ' WHERE'
+        '   transactions.org_id_fk=? and'
+        '   cat_type_name = "Income" and'
+        '   trans_post_date >= ?'
+        ' GROUP BY'
+        '   cat_type_name,'
+        '   period'
+        ' ORDER BY'
+        '   period',
+        (
+            session['current_org'],
+            from_date,
+        )
+    ).fetchall()
+
+    return values
