@@ -11,4 +11,4 @@ Hermes is an accounting program written in Flask.
  - VAT module
  - Add manage users module
  - Invoicing
- 
+ - Re-org files to make more modular

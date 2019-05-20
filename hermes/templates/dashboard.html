@@ -9,16 +9,11 @@
 
 
 {% block content %}
-    <div class="card-deck mb-4">
-        <div class="card shadow">
-            <canvas id="monthIncome"></canvas>
-        </div>
-    </div>
 
-    <div class="card-deck">
-        <div class="card shadow">
-            <div class="card-body">
-                <ul class="list-unstyled">
+<div class="card-deck">
+    <div class="card shadow">
+        <div class="card-body">
+            <ul class="list-unstyled">
                     <li class="row">
                         <span class="col"><strong>Category Type</strong></span>
                         <span class="col"><strong>Category</strong></span>
@@ -32,12 +27,12 @@
                     </li>
                 {% endfor %}
                 </ul>
-            </div>
         </div>
-        
-        <div class="card shadow">
-            <div class="card-body">
-                <table class="table table-sm table-striped">
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-sm table-striped">
                     <tr class="thead-light">
                         <th>Account</th>
                         <th>Reference</th>
@@ -53,10 +48,21 @@
                         </tr>
                     {% endfor %}
                 </table>
-            </div>
         </div>
     </div>
+</div>
 
+<div class="card-deck mt-4">
+    <div class="card shadow">
+        <div class="card-header">
+            Monthly Income
+        </div>
+
+        <div class="card-body">
+            <canvas id="monthIncome"></canvas>
+        </div>
+    </div>
+</div>
 
 <script>
 var ctx = document.getElementById('monthIncome').getContext('2d');
@@ -65,17 +71,33 @@ var myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: [{% for each in chart_data %}
-                    {{ each['period']}},
+                    "{{ each['period'] }}",
                     {% endfor %}
         ],
         datasets: [{
-            label: 'Income',
+            label: '',
             data: [{% for each in chart_data %}
                     {{ each['value'] }},
                     {% endfor %}
-                ],
-            borderWidth: 1
+                ]
         }]
+        },
+        options: {
+            title: {
+                display: false
+            },
+
+            legend:{
+                display: false
+            },
+
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
     }
 });
 </script>

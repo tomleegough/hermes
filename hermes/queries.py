@@ -552,7 +552,7 @@ def dashboard_graph():
 
     values = db.execute(
         'SELECT'
-        '   strftime("%Y-%m", trans_post_date) as period,'
+        '   strftime("%Y-%m-", trans_post_date)||"01" as period,'
         '   sum(trans_value) as value'
         ' FROM'
         '   transactions'
