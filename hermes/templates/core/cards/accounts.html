@@ -6,7 +6,7 @@
 
 {% block toolbar %}
     <div class="mb-2">
-        <a role="button" class="btn btn-outline-dark" href="{{ url_for('bank.create_account') }}">Create Account</a>
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('create_account') }}">Create Account</a>
     </div>
 {% endblock %}
 
@@ -19,7 +19,7 @@
             <div class="card shadow mt-5 {% if account['bank_balance'] < 0 %} border-danger {% endif %}">
                 <div class="card-header bg-dark text-light d-flex justify-content-between">
                     <h2 class="card-title mb-0">{{account['bank_name']}}</h2>
-                    <a class="btn btn-light" href="{{ url_for('bank.account', bank_id=account['bank_id'])}}">
+                    <a class="btn btn-light" href="{{ url_for('account', bank_id=account['bank_id'])}}">
                         <i class="fas fa-edit"></i>
                     </a>
                 </div>

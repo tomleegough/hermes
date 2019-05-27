@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}{{'Categories'}}{% endblock %}</h1>
+{% endblock %}
+
+{% block toolbar %}
+    <div class="mb-2">
+        <a role="button" class="btn btn-outline-dark" href="{{ url_for('accounts.category', action='add') }}">Add new</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {% if categories == [] %}
+        <h1>Add categories</h1>
+    {% else %}
+
+    <div>
+        {% for category in categories %}
+        <div class="border container mt-3">
+            <div class="bg-dark p-2 row justify-content-between">
+                <h4 class="text-light">{{ category['category_name'] }}</h4>
+                <div>
+                    
+                    <button class="btn btn-sm btn-light dropdown-toggle" id="{{category['category_id']}}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="oi oi-pencil" title="Edit" aria-hidden="false"></span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="{{category['category_id']}}">
+                        <a class="dropdown-item" href="{{ url_for('accounts.category', action='edit', cat_id=category['category_id'])}}">Edit</a>
+                        <a class="dropdown-item" href="{{ url_for('accounts.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">Change Status</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <ul class="unstyled-list">
+                        <li class="row">
+                            <strong class="col">Category:</strong>
+                            <span class="col">{{ category['cat_type_name'] }}</span>
+                        </li>
+                        <li class="row">
+                            <strong class="col">Status:</strong>
+                            <a class="col dropdown-item" href="{{ url_for('accounts.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
+                                {% if category['category_enabled_flag'] == 1 %}
+                                <span class="badge badge-success">Active</span>
+                                {% else %}
+                                <span class="badge badge-danger">Disabled</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+{% endblock %}

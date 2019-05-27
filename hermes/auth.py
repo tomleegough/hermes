@@ -6,7 +6,6 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from hermes.db import get_db
-from hermes.session import update_orgs
 from uuid import uuid4
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -172,3 +171,16 @@ def change_pass():
             db.commit()
 
     return render_template('auth/change.html')
+
+def update_orgs():
+    orgs = queries.get_active_orgs_for_current_user()
+
+    session['orgs'] = []
+
+    for org in orgs:
+        session['orgs'].append(
+            {
+                'org_id': org['org_id'],
+                'org_name': org['org_name']
+            }
+        )

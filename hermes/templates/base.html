@@ -29,9 +29,9 @@
                     </a>
                     
                     <div class="dropdown-menu">
-                        <a class="nav-link dropdown-item" href="{{ url_for('settings.create_item', item='category') }}">Category</a>
-                        <a class="nav-link dropdown-item" href="{{ url_for('bank.create_account') }}">Bank Account</a>
-                        <a class="nav-link dropdown-item" href="{{ url_for('bank.create_transaction') }}">Bank Transaction</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_item', item='category') }}">Category</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_account') }}">Bank Account</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_transaction') }}">Bank Transaction</a>
                     </div>
                 </li>
 
@@ -49,7 +49,7 @@
                     </a>
                     
                     <div class="dropdown-menu">
-                        <a class="nav-link dropdown-item" href="{{ url_for('settings.show_categories') }}">Categories</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_categories') }}">Categories</a>
                     </div>
                 </li>
                 
@@ -58,9 +58,9 @@
                         <i class="fas fa-money-bill"></i>
                         Banking</a>
                     <div class="dropdown-menu">
-                        <a class="nav-link dropdown-item" href="{{ url_for('bank.show_accounts') }}">Accounts</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_accounts') }}">Accounts</a>
                         <div class="dropdown-divider"></div>
-                        <a class="nav-link dropdown-item" href="{{ url_for('bank.create_transaction') }}">New Bank Transaction</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_transaction') }}">New Bank Transaction</a>
                     </div>
                 </li>
                 
@@ -70,11 +70,11 @@
                     Organisations</a>
                     <div class="dropdown-menu">
                         {% for org in session['orgs'] %}
-                            <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-dark text-light{% endif %}" href="{{ url_for('settings.change_org', org_id=org['org_id'], return_url='o')}}">{{org['org_name']}}</a>
+                            <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-dark text-light{% endif %}" href="{{ url_for('accounts.change_org', org_id=org['org_id'], return_url='o')}}">{{org['org_name']}}</a>
                         {% endfor %}
                         <div class="dropdown-divider"></div>
-                        <a class="nav-link dropdown-item" href="{{ url_for('settings.show_organisations') }}">Manage</a>
-                        <a class="nav-link dropdown-item" href="{{ url_for('settings.create_item', item='organisation')}}">Create new</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_organisations') }}">Manage</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_item', item='organisation')}}">Create new</a>
                     </div>
                 </li>
                 
@@ -103,7 +103,7 @@
                 
                 <div class="dropdown-menu col justify-content-right" id="navbarSupportedContent">
                     <a href="{{ url_for('index') }}" class="nav-link text-dark">Dashboard</a>
-                    <a class="nav-link text-dark" href="{{ url_for('settings.show_organisations') }}">Organisations</a>
+                    <a class="nav-link text-dark" href="{{ url_for('accounts.show_organisations') }}">Organisations</a>
                     <div class="dropdown-divider"></div>
                     <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">Logout</a>
                 </div>              

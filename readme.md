@@ -1,6 +1,6 @@
 # HERMES ACCOUNTING
 
-Hermes is an accounting program written in Flask.
+Hermes is your favourite Grade 36 bureaucrat. It is also an accounting program written in Flask.
 
 ## TODO
  - Wizards
@@ -14,3 +14,7 @@ Hermes is an accounting program written in Flask.
  - Extra Modules
    - VAT module
    - Invoicing
+ - Security
+   - Email as username, verification
+ - Other
+   - Make sure company is selected - URL decorator?
