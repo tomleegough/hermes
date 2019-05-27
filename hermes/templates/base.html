@@ -17,7 +17,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-dark sticky-top bg-dark">
+        <nav class="navbar navbar-dark sticky-top bg-primary">
             <a class="navbar-brand" href="{{ url_for('index') }}">Hermes Accounting</a>
 
             {% if g.user != None %} 
@@ -25,9 +25,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle"></i>
+                        Create
                     </a>
                     
                     <div class="dropdown-menu">
+                        <a class="nav-link dropdown-item" href="{{ url_for('settings.create_item', item='category') }}">Category</a>
+                        <a class="nav-link dropdown-item" href="{{ url_for('bank.create_account') }}">Bank Account</a>
                         <a class="nav-link dropdown-item" href="{{ url_for('bank.create_transaction') }}">Bank Transaction</a>
                     </div>
                 </li>
@@ -110,7 +113,7 @@
 
         <div class="container-fluid">
             <div class="">
-                <main role="main" class="mx-auto container">
+                <main role="main" class="mx-auto">
 
                     <header class="mt-3">
                         {% block header %}{% endblock %}

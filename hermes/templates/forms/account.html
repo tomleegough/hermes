@@ -3,11 +3,7 @@
 {% block header %}
     <h1>
         {% block title %}
-            {% if action == 'create' %}
-                {{'Add New Bank Account'}} 
-            {% else %}
-                {{'Edit Bank Account'}}
-            {% endif %}
+            {{action}} Bank Account
         {% endblock %}
     </h1>
 {% endblock %}
@@ -67,7 +63,7 @@
                 <div class="form-group row">
                     <input
                         type="submit"
-                        class="col btn btn-dark mt-3"
+                        class="col btn btn-primary mt-3"
                         value="{% if action == 'create' %}
                                 Create Bank Account
                                {% else %}
