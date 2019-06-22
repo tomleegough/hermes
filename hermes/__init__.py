@@ -31,11 +31,12 @@ from hermes import db
 db.init_app(app)
 
 # apply the blueprints to the app
-from hermes import auth, core, core_queries
+from hermes import auth, core, core_queries, mail
 
 app.register_blueprint(auth.bp)
 app.register_blueprint(core.bp)
 app.register_blueprint(core_queries.bp)
+app.register_blueprint(mail.bp)
 
 # make url_for('index') == url_for('blog.index')
 # in another app, you might define a separate main index here with

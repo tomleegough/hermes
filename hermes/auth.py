@@ -7,6 +7,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from hermes.db import get_db
 from uuid import uuid4
+from hermes.mail import send_verification_email
+import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -49,7 +51,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        email = request.form['user_email']
+        # email = request.form['user_email']
         db = get_db()
         error = None
 
@@ -67,11 +69,35 @@ def register():
         if error is None:
             # the name is available, store it in the database and go to
             # the login page
+
+            user_activate_url = str(uuid4())
+
             db.execute(
-                'INSERT INTO user(user_id, user_name, user_pass, user_email) VALUES (?, ?, ?, ?)',
-                (str(uuid4()), username, generate_password_hash(password), email)
+                'INSERT INTO user('
+                '   user_id,'
+                '   user_name,'
+                '   user_pass,'
+                '   user_enabled_flag,'
+                '   user_activated_flag,'
+                '   user_activate_url,'
+                '   user_activate_url_expiry'
+                ' ) VALUES ('
+                '   ?, ?, ?, ?, ?, ?, ?'
+                ' )',
+                (
+                    str( uuid4()) ,
+                    username,
+                    generate_password_hash( password ),
+                    1,
+                    0,
+                    user_activate_url,
+                    ( datetime.datetime.now() + datetime.timedelta(days=1) ).strftime('%Y-%m-%d')
+                )
             )
             db.commit()
+
+            send_verification_email(username, user_activate_url)
+
             return redirect(
                 url_for('auth.login')
             )
