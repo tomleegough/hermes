@@ -28,8 +28,16 @@ def send_verification_email(recipient, user_activate_url):
                 ],
 
                 "Subject": "Verify your Hermes Account",
-                "TextPart": "Please verify your Herming Accounting Login to use the app.",
-                "HTMLPart": "<a href='https://hermes.tlg-accounting.co.uk/auth/" + user_activate_url +"'>link</a>"
+                "TextPart": "Please verify your Hermes Accounting Login to use the app.",
+                "HTMLPart":
+                    """
+                        <h1>Welcome to Hermes Accounting!</h1>
+                        <p>Welcome to Hermes Accounting! Before you can log in with your newly created account. You will need to verify your email address.
+                    </p>
+                        <p>To activate your account, follow this link <a href="https://hermes.tlg-accounting/auth/activate">https://hermes.tlg-accounting/auth/activate</a> and enter your email and activation code, included in this email</p>
+                        <p><b>Activation Code:</b> {} </p>
+                        <p>Thank you for creating your account</p>
+                    """.format(user_activate_url)
             }
         ]
     }

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}{{"Log In"}}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid col-md-10 col-lg-6 mx-auto">
+        <div class="p-5 mx-auto border mt-5 bg-light">
+            <h2 class="text-center">Activate your Hermes Accounting Account</h2>
+
+            <form method="post" class="p-md-5 mx-auto">
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i id="user-icon" class="fas fa-at"></i></span>
+                        </div>
+                        <input name="username" id="username" class="form-control" placeholder="email" aria-describedby="user-icon" required>
+                    </div>
+                </div>
+
+              <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-unlock"></i>
+                            </span>
+                        </div>
+
+                        <input name="activate_code" id="activate_code" class="form-control" placeholder="activation code" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="mx-auto">
+                        <input type="submit" class="col btn btn-dark" value="Activate">
+                    </div>
+                </div>
+
+                {% if error != '' %}
+                <div class="form-group row">
+                    <div class="col mx-auto">
+                        <p><strong>{{ error }}</strong></p>
+                    </div>
+                </div>
+                {% endif %}
+
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

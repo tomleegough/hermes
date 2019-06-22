@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from hermes.db import get_db
 from uuid import uuid4
 from hermes.mail import send_verification_email
+import hermes.core_queries as queries
 import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -125,6 +126,8 @@ def login():
             error = 'Incorrect username or password.'
         elif not check_password_hash(user['user_pass'], password):
             error = 'Incorrect username or password.'
+        elif user['user_activated_flag'] == 0:
+            error = 'User not activated'
 
         if error is None:
             # store the user id in a new session and return to the index
@@ -197,6 +200,43 @@ def change_pass():
             db.commit()
 
     return render_template('auth/change.html')
+
+
+@bp.route('/activate', methods=('POST', 'GET'))
+def activate_user():
+
+    if request.method == 'POST':
+
+        db = get_db()
+
+        db.execute(
+            'UPDATE'
+            '    user'
+            ' SET'
+            '    user_activated_flag = 1'
+            ' WHERE'
+            '   user_name = ? and'
+            '   user_activate_url = ? and'
+            '   user_activate_url_expiry >= ?',
+            (
+                request.form['username'],
+                request.form['activate_code'],
+                datetime.datetime.now().strftime('%Y-%m-%d')
+            )
+        )
+
+        db.commit()
+
+        return redirect(
+            url_for(
+                'auth.login'
+            )
+        )
+
+    return render_template(
+        'auth/activate.html'
+    )
+
 
 def update_orgs():
     orgs = queries.get_active_orgs_for_current_user()

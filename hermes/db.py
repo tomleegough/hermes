@@ -41,14 +41,6 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-    db.execute(
-        'INSERT INTO user'
-        '  (user_id, user_name, user_pass, user_enabled_flag)'
-        ' VALUES'
-        '  (?,?,?,?)',
-        (str(uuid4()), 'admin', generate_password_hash('admin'), 1)
-    )
-
     cat_types = [
         {
             'cat_type_id': str(uuid4()),
@@ -120,7 +112,7 @@ def init_db():
 
         {
             'vat_type_id': str(uuid4()),
-            'vat_type_name': 'Out of Scape',
+            'vat_type_name': 'Out of Scope',
             'vat_type_rate': 0,
             'vat_type_rtn_inc': 0
         }
