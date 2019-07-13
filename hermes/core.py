@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session, jsonify
+    Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 
 from hermes.auth import login_required
@@ -114,12 +114,12 @@ def change_status(item, id, status_flag):
 
     if item == 'categories':
         queries.change_category_status(status_flag, id)
-        url = url_for('settings.show_categories')
+        url = url_for('accounts.show_categories')
 
     if item == 'organisations':
         queries.change_org_status(status_flag, id)
         update_orgs()
-        url = url_for('settings.show_organisations')
+        url = url_for('accounts.show_organisations')
 
     return redirect(
         url
@@ -139,7 +139,7 @@ def create_item(item):
                 request.form['active_flag'] = 0
             queries.create_category(request.form)
             return redirect(
-                url_for('settings.show_categories')
+                url_for('accounts.show_categories')
             )
 
         return render_template(
@@ -154,7 +154,7 @@ def create_item(item):
             queries.create_organisation(request.form)
             update_orgs()
             return redirect(
-                url_for('settings.show_organisations')
+                url_for('accounts.show_organisations')
             )
 
         return render_template(
@@ -171,7 +171,7 @@ def category(action, cat_id):
             request.form['active_flag'] = 0
         queries.create_category(request.form)
         return redirect(
-            url_for('settings.show_categories')
+            url_for('accounts.show_categories')
         )
 
     if request.method == 'POST' and action == 'edit':
@@ -179,7 +179,7 @@ def category(action, cat_id):
             request.form['active_flag'] = 0
         queries.update_category(request.form, cat_id)
         return redirect(
-            url_for('settings.show_categories')
+            url_for('accounts   .show_categories')
         )
 
     cat_types = queries.get_category_types()
@@ -211,7 +211,7 @@ def organisation(action, org_id):
         queries.update_organistation(request.form, org_id)
         update_orgs()
         return redirect(
-            url_for('settings.show_organisations')
+            url_for('accounts.show_organisations')
         )
 
     return render_template(

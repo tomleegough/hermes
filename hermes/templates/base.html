@@ -21,7 +21,7 @@
             <a class="navbar-brand" href="{{ url_for('index') }}">Hermes Accounting</a>
 
             {% if g.user != None %} 
-            <ul class="nav d-none d-md-flex">
+            <ul class="nav d-md-flex">
                 <li class="nav-item dropdown">
                     <a class="nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle"></i>
@@ -80,7 +80,7 @@
                 
                 <li class="nav-item dropdown">
 
-                    <a class="text-capitalize nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown"
+                    <a class="text-lower nav-link text-light dropdown-toggle" role="button" data-toggle="dropdown"
                         href="#" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
                         {{g.user['user_name']}}</a>
@@ -96,18 +96,6 @@
                 </li>
             </ul>
 
-            <div class="d-md-none">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="dropdown-menu col justify-content-right" id="navbarSupportedContent">
-                    <a href="{{ url_for('index') }}" class="nav-link text-dark">Dashboard</a>
-                    <a class="nav-link text-dark" href="{{ url_for('accounts.show_organisations') }}">Organisations</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="nav-link text-dark" href="{{ url_for('auth.logout') }}">Logout</a>
-                </div>              
-            </div>
             {% endif %}
         </nav>
 

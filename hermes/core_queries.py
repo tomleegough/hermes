@@ -405,13 +405,14 @@ def create_bank_account(form_data):
     db.commit()
 
     o_bal = {
-        'trans_post_date': form_data['open_date'],
-        'trans_description': 'Opening Balance',
+        'trans_date': form_data['open_date'],
+        'trans_desc': 'Opening Balance',
         'trans_value': form_data['open_balance'],
         'sign': 1,
         'org_id_fk': session['current_org'],
         'trans_created_date': datetime.datetime.now().strftime('%Y-%m-%d'),
         'bank_id': bank_id,
+        'cat_id' : ''
     }
 
     create_transaction(o_bal)
