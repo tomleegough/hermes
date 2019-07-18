@@ -16,8 +16,25 @@
         <h1>Add bank accounts</h1>
     {% else %}
         {% for account in accounts %}
-            <div class="card shadow mt-5 {% if account['bank_balance'] < 0 %} border-danger {% endif %}">
-                <div class="card-header bg-dark text-light d-flex justify-content-between">
+            <div class="
+                card
+                shadow
+                mt-5
+                {% if account['bank_balance'] < 0 %}
+                    border-danger
+                {% endif %}
+            ">
+                <div class="
+                    card-header
+                    {% if account['bank_balance'] < 0 %}
+                        bg-danger
+                    {% else %}
+                        bg-dark
+                    {% endif %}
+                    text-light
+                    d-flex
+                    justify-content-between
+                ">
                     <h2 class="card-title mb-0">{{account['bank_name']}}</h2>
                     <a class="btn btn-light" href="{{ url_for('accounts.account', bank_id=account['bank_id'])}}">
                         <i class="fas fa-edit"></i>

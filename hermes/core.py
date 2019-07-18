@@ -31,7 +31,7 @@ def index():
 @bp.route('/accounts')
 @login_required
 def show_accounts():
-    accounts = queries.bank_values()
+    accounts = queries.get_bank_accounts_for_current_org()
     return render_template(
         'core/cards/accounts.html',
         accounts=accounts
@@ -78,6 +78,7 @@ def account(bank_id):
 def create_transaction():
     categories = queries.get_active_categories_for_current_org()
     accounts = queries.get_bank_accounts_for_current_org()
+    vat_codes = queries.get_vat_codes()
 
     if request.method == 'POST':
         queries.create_transaction(request.form)
@@ -89,7 +90,8 @@ def create_transaction():
         'core/forms/transaction.html',
         action='create',
         categories=categories,
-        accounts=accounts
+        accounts=accounts,
+        vat_codes=vat_codes
     )
 
 ##### Settings
@@ -114,17 +116,15 @@ def change_status(item, id, status_flag):
 
     if item == 'categories':
         queries.change_category_status(status_flag, id)
-        url = url_for('accounts.show_categories')
+        return redirect(
+            url_for('accounts.show_categories')
+        )
 
     if item == 'organisations':
         queries.change_org_status(status_flag, id)
-        update_orgs()
-        url = url_for('accounts.show_organisations')
-
-    return redirect(
-        url
-    )
-
+        return redirect(
+            url_for('accounts.show_organisations')
+        )
 
 
 @bp.route('/<item>/create/', methods=['POST', 'GET'])
@@ -162,6 +162,7 @@ def create_item(item):
         )
 
 
+
 @bp.route('/category/<action>/<cat_id>', methods=['POST', 'GET'])
 @login_required
 def category(action, cat_id):
@@ -179,7 +180,7 @@ def category(action, cat_id):
             request.form['active_flag'] = 0
         queries.update_category(request.form, cat_id)
         return redirect(
-            url_for('accounts   .show_categories')
+            url_for('accounts.show_categories')
         )
 
     cat_types = queries.get_category_types()
@@ -192,6 +193,8 @@ def category(action, cat_id):
         action=action
     )
 
+
+##### Organisations
 @bp.route('/organisations')
 @login_required
 def show_organisations():

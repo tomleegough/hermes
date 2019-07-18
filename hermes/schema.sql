@@ -10,7 +10,8 @@ CREATE TABLE user (
     user_activated_flag INTEGER,
     user_activate_url TEXT,
     user_activate_url_expiry TEXT,
-    user_last_org_id TEXT
+    user_last_org_id TEXT,
+    user_created_date TEXT
 );
 
 DROP TABLE IF EXISTS organisation;
@@ -43,7 +44,8 @@ CREATE TABLE transactions (
     trans_id TEXT PRIMARY KEY,
     trans_post_date DATE,
     trans_created_date DATE,
-    trans_value REAL,
+    trans_value_net REAL,
+    trans_value_vat REAL,
     trans_description TEXT,
     user_id_fk TEXT,
     org_id_fk TEXT,

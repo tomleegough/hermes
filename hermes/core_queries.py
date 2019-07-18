@@ -10,8 +10,6 @@ import datetime
 bp = Blueprint('queries', __name__)
 
 # Categories
-
-
 def category_values_for_current_org():
     # SUM value of transactions for given category
     db = get_db()
@@ -20,8 +18,8 @@ def category_values_for_current_org():
         'SELECT'
         '   *, '
         ' CASE'
-        '   WHEN sum(trans_value) is Null THEN 0'
-        '   ELSE sum(trans_value)'
+        '   WHEN sum(trans_value_net) is Null THEN 0'
+        '   ELSE sum(trans_value_net)'
         '   END AS "value"'
         ' FROM'
         '   categories'
@@ -348,10 +346,12 @@ def get_bank_accounts_for_current_org():
         '   bank_reference,'
         '   bank_enabled_flag,'
         '   bank_currency_code,'
-        '   CASE'
-        '     WHEN sum(trans_value) IS NULL THEN 0'
-        '     ELSE sum(trans_value)'
-        '     END as "bank_balance"'
+        '   round('
+        '       sum( '
+        '           IFNULL(trans_value_net, 0) +'
+        '           IFNULL(trans_value_vat, 0)'
+        '       ), 2       '
+        '   ) as "bank_balance"'
         ' FROM'
         '   bank'
         ' LEFT JOIN'
@@ -398,7 +398,7 @@ def create_bank_account(form_data):
             datetime.datetime.now().strftime('%Y-%m-%d'),
             form_data['bank_enabled_flag'],
             form_data['bank_currency_code'],
-            session['current_org'],
+            session['current_org']
         )
     )
 
@@ -407,12 +407,14 @@ def create_bank_account(form_data):
     o_bal = {
         'trans_date': form_data['open_date'],
         'trans_desc': 'Opening Balance',
-        'trans_value': form_data['open_balance'],
+        'trans_value_net': form_data['open_balance'],
+        'trans_value_vat': 0.00,
         'sign': 1,
         'org_id_fk': session['current_org'],
         'trans_created_date': datetime.datetime.now().strftime('%Y-%m-%d'),
         'bank_id': bank_id,
-        'cat_id' : ''
+        'cat_id': '',
+        'vat_type_id_fk': 'OS'
     }
 
     create_transaction(o_bal)
@@ -426,13 +428,17 @@ def create_transaction(trans_data):
         '   trans_id,'
         '   trans_post_date,'
         '   trans_created_date,'
-        '   trans_value,'
+        '   trans_value_net,'
+        '   trans_value_vat,'
         '   trans_description,'
         '   user_id_fk,'
         '   org_id_fk,'
         '   bank_id_fk,'
-        '   category_id_fk'
+        '   category_id_fk,'
+        '   vat_type_id_fk'
         ' ) VALUES ('
+        '   ?,'
+        '   ?,'
         '   ?,'
         '   ?,'
         '   ?,'
@@ -447,12 +453,14 @@ def create_transaction(trans_data):
             str(uuid4()),
             trans_data['trans_date'],
             datetime.datetime.now().strftime('%Y-%m-%d'),
-            float(trans_data['trans_value']) * float(trans_data['sign']),
+            float(trans_data['trans_value_net']) * float(trans_data['sign']),
+            float(trans_data['trans_value_vat']) * float(trans_data['sign']),
             trans_data['trans_desc'],
             session['user_id'],
             session['current_org'],
             trans_data['bank_id'],
-            trans_data['cat_id']
+            trans_data['cat_id'],
+            trans_data['vat_type_id_fk'],
         )
     )
 
@@ -520,31 +528,6 @@ def get_active_categories_for_current_org():
     return categories
 
 
-def bank_values():
-    db = get_db()
-
-    accounts = db.execute(
-        'SELECT'
-        '  bank_id,'
-        '  bank_name,'
-        '  bank_reference,'
-        '  bank_enabled_flag,'
-        '  bank_currency_code,'
-        ' CASE'
-        '  WHEN sum(trans_value) is NULL THEN 0'
-        '  ELSE sum(trans_value)'
-        '  END AS "bank_balance"'
-        ' FROM bank'
-        ' LEFT JOIN transactions on bank_id = bank_id_fk'
-        ' WHERE bank.org_id_fk=?'
-        ' GROUP BY bank_id',
-        (
-            session['current_org'],
-        )
-    ).fetchall()
-
-    return accounts
-
 def dashboard_graph():
     db = get_db()
 
@@ -554,7 +537,7 @@ def dashboard_graph():
     values = db.execute(
         'SELECT'
         '   strftime("%Y-%m-", trans_post_date)||"01" as period,'
-        '   sum(trans_value) as value'
+        '   sum(trans_value_net) as value'
         ' FROM'
         '   transactions'
         ' JOIN'
@@ -577,3 +560,13 @@ def dashboard_graph():
     ).fetchall()
 
     return values
+
+def get_vat_codes():
+    db = get_db()
+
+    vat_codes = db.execute(
+        'SELECT *'
+        ' FROM vat_type'
+    ).fetchall()
+
+    return vat_codes

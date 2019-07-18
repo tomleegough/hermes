@@ -83,35 +83,35 @@ def init_db():
 
     vat_types = [
         {
-            'vat_type_id': str(uuid4()),
+            'vat_type_id': 'ZR',
             'vat_type_name': 'Zero Rated',
             'vat_type_rate': 0,
             'vat_type_rtn_inc': 1
         },
 
         {
-            'vat_type_id': str(uuid4()),
+            'vat_type_id': 'RR',
             'vat_type_name': 'Reduced Rate',
             'vat_type_rate': 0.05,
             'vat_type_rtn_inc': 1
         },
 
         {
-            'vat_type_id': str(uuid4()),
+            'vat_type_id': 'SR',
             'vat_type_name': 'Standard Rate',
             'vat_type_rate': 0.2,
             'vat_type_rtn_inc': 1
         },
 
         {
-            'vat_type_id': str(uuid4()),
+            'vat_type_id': 'EX',
             'vat_type_name': 'Exempt',
             'vat_type_rate': 0,
             'vat_type_rtn_inc': 1
         },
 
         {
-            'vat_type_id': str(uuid4()),
+            'vat_type_id': 'OS',
             'vat_type_name': 'Out of Scope',
             'vat_type_rate': 0,
             'vat_type_rtn_inc': 0
@@ -346,7 +346,7 @@ def generate_test_data():
                 db.execute(
                     'INSERT INTO transactions'
                     ' (trans_id, trans_post_date, trans_created_date,'
-                    ' trans_value, trans_description, user_id_fk,'
+                    ' trans_value_net, trans_description, user_id_fk,'
                     ' org_id_fk, bank_id_fk, category_id_fk)'
                     ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                     (str(uuid4()), trans_date, today,

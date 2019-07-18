@@ -10,6 +10,7 @@ from uuid import uuid4
 from hermes.mail import send_verification_email
 import hermes.core_queries as queries
 import datetime
+import time
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -81,9 +82,10 @@ def register():
                 '   user_enabled_flag,'
                 '   user_activated_flag,'
                 '   user_activate_url,'
-                '   user_activate_url_expiry'
+                '   user_activate_url_expiry,'
+                '   user_created_date'
                 ' ) VALUES ('
-                '   ?, ?, ?, ?, ?, ?, ?'
+                '   ?, ?, ?, ?, ?, ?, ?, ?'
                 ' )',
                 (
                     str( uuid4()) ,
@@ -92,7 +94,8 @@ def register():
                     1,
                     0,
                     user_activate_url,
-                    ( datetime.datetime.now() + datetime.timedelta(days=1) ).strftime('%Y-%m-%d')
+                    ( datetime.datetime.now() + datetime.timedelta(days=1) ).strftime('%Y-%m-%d'),
+                    datetime.datetime.now().strftime('%Y-%m-%d')
                 )
             )
             db.commit()
@@ -198,6 +201,8 @@ def change_pass():
             )
 
             db.commit()
+
+            return render_template('auth/success.html')
 
     return render_template('auth/change.html')
 
