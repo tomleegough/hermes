@@ -1,7 +1,15 @@
     {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Dashboard{% endblock %}</h1>
+    <h1>
+        {% block title %}
+            {% if session['current_org_name'] != '' %}
+                {{ session['current_org_name'] }}
+            {% else %}
+                Dashboard
+            {% endif %}
+        {% endblock %}
+    </h1>
 {% endblock %}
 
 {% block toolbar %}
@@ -61,9 +69,7 @@
                 </table>
         </div>
     </div>
-<!--</div>-->
 
-<!--<div class="card-deck mt-4">-->
     <div class="card shadow">
         <div class="card-header bg-primary text-light">
             Monthly Income

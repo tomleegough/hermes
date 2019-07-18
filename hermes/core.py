@@ -120,6 +120,15 @@ def show_categories():
     )
 
 
+@bp.route('/feedback')
+@login_required
+def feedback():
+
+    return render_template(
+        'core/pages/feedback.html'
+    )
+
+
 @bp.route('/<item>/change-status/<id>/<status_flag>')
 @login_required
 def change_status(item, id, status_flag):
@@ -242,6 +251,8 @@ def organisation(action, org_id):
 @login_required
 def change_org(org_id):
     session['current_org'] = org_id
+    org_data = queries.get_org_by_id(org_id)
+    session['current_org_name'] = org_data['org_name']
     return redirect(
         url_for('accounts.index')
     )
