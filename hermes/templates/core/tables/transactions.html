@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}{{category['cateogry_name']}}{{ 'Transactions'}}{% endblock %}</h1>
+{% endblock %}
+
+{% block toolbar %}
+
+{% endblock %}
+
+{% block content %}
+
+    <table class="table table-sm table-striped">
+        <tr class="thead-light">
+            <th>Posting Date</th>
+            <th>Created Date</th>
+            <th>Description</th>
+            <th>Net</th>
+            <th>VAT</th>
+            <th>Gross</th>
+            <th>User</th>
+        </tr>
+
+        {% for trans in transactions %}
+        <tr>
+            <td>{{ trans['trans_post_date'] }}</td>
+            <td>{{ trans['trans_created_date'] }}</td>
+            <td>{{ trans['trans_description'] }}</td>
+            <td>{{ trans['trans_value_net'] }}</td>
+            <td>{{ trans['trans_value_vat'] }}</td>
+            <td>{{ trans['trans_value_net'] + trans['trans_value_vat'] }}</td>
+            <td>{{ trans['user_name'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

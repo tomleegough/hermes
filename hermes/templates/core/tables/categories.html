@@ -28,7 +28,7 @@
 
         {% for category in categories %}
         <tr>
-            <td><a href="{{ url_for('accounts.category', action='edit', cat_id=category['category_id'])}}">{{ category['category_name'] }}</td>
+            <td><a href="{{ url_for( 'accounts.view_transactions', category_id=category['category_id'] )}}">{{ category['category_name'] }}</td>
             <td>
                 <a class="pl-0 dropdown-item" href="{{ url_for('accounts.change_status', item='categories', id=category['category_id'], status_flag=category['category_enabled_flag'])}}">
                     {% if category['category_enabled_flag'] == 1 %}

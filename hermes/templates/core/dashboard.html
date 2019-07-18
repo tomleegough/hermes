@@ -25,7 +25,11 @@
                 {% for cat in categories %}
                     <li class="row {% if cat['value'] < 0 %} text-danger {% endif %}">
                         <span class="col">{{cat['cat_type_name']}}</span>
-                        <span class="col">{{cat['category_name']}}</span>
+                        <span class="col">
+                            <a href=" {{ url_for( 'accounts.view_transactions', category_id=cat['category_id'] ) }}">
+                                {{cat['category_name']}}
+                            </a>
+                        </span>
                         <span class="col text-right">{{ "{:,.2f}".format(cat['value']) }}</span>
                     </li>
                 {% endfor %}
@@ -57,9 +61,9 @@
                 </table>
         </div>
     </div>
-</div>
+<!--</div>-->
 
-<div class="card-deck mt-4">
+<!--<div class="card-deck mt-4">-->
     <div class="card shadow">
         <div class="card-header bg-primary text-light">
             Monthly Income
@@ -69,6 +73,7 @@
             <canvas id="monthIncome"></canvas>
         </div>
     </div>
+
 </div>
 
 <script>

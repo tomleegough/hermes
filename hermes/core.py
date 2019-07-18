@@ -72,6 +72,20 @@ def account(bank_id):
         action='edit'
     )
 
+##### Transactions
+@bp.route('/view/<category_id>/transactions')
+@login_required
+def view_transactions(category_id):
+
+    transactions = queries.get_transactions_for_category(category_id)
+    cat = queries.get_category_by_id(category_id)
+
+    return render_template(
+        'core/tables/transactions.html',
+        transactions=transactions,
+        category=cat
+    )
+
 
 @bp.route('/create/transaction/', methods=['POST', 'GET'])
 @login_required

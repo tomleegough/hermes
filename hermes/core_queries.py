@@ -50,9 +50,11 @@ def get_transactions_for_category(category_id):
         '   *'
         ' FROM'
         '   transactions'
+        ' JOIN'
+        '   user on user_id = user_id_fk'
         ' WHERE'
         '   org_id_fk = ? and'
-        '   category_if_fk = ?',
+        '   category_id_fk = ?',
         (
             session['current_org'],
             category_id,
@@ -402,6 +404,14 @@ def create_bank_account(form_data):
         )
     )
 
+    vat_type = db.execute(
+        'SELECT vat_type_id'
+        ' FROM'
+        '  vat_type'
+        ' WHERE'
+        '  vat_type_name = "Out of Scope"'
+    ).fetchall()
+
     db.commit()
 
     o_bal = {
@@ -414,7 +424,7 @@ def create_bank_account(form_data):
         'trans_created_date': datetime.datetime.now().strftime('%Y-%m-%d'),
         'bank_id': bank_id,
         'cat_id': '',
-        'vat_type_id_fk': 'OS'
+        'vat_type_id_fk': vat_type['vat_type_id']
     }
 
     create_transaction(o_bal)
