@@ -38,6 +38,8 @@
 
                 <div>
                     <a href=" {{ url_for('auth.register') }} ">Register</a>
+                    <br>
+                    <a href=" {{ url_for('auth.request_reset') }} ">Reset Password</a>
                 </div>
 
                 {% if error != '' %}

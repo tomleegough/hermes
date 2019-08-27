@@ -7,10 +7,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from hermes.db import get_db
 from uuid import uuid4
-from hermes.mail import send_verification_email
+from hermes.mail import (
+    send_verification_email, send_password_reset
+)
 import hermes.core_queries as queries
 import datetime
-import time
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -242,6 +243,86 @@ def activate_user():
         'auth/activate.html'
     )
 
+
+@bp.route('/request_reset', methods=['POST', 'GET'])
+def request_reset():
+
+    if request.method == 'POST':
+        temp_pass = str(uuid4())
+        db = get_db()
+        db.execute(
+            'UPDATE'
+            '   user'
+            '  SET'
+            '   user_pass = ?,'
+            '   user_activated_flag = 0'
+            '  WHERE'
+            '   user_name = ?',
+            (
+                generate_password_hash(temp_pass),
+                request.form['username']
+            )
+        )
+
+        db.commit()
+
+        send_password_reset(
+            request.form['username'],
+            temp_pass
+        )
+
+        return redirect(
+            url_for(
+                'accounts.index'
+            )
+        )
+
+    return render_template(
+        'auth/request-reset.html'
+    )
+
+@bp.route('/reset', methods=['POST', 'GET'])
+def reset_password():
+    db = get_db()
+
+    if request.method == 'POST':
+        username = request.form['user_name']
+
+        user = db.execute(
+            'SELECT * FROM user WHERE user_name = ?',
+            (
+                username,
+            )
+        ).fetchone()
+
+        password = user['user_pass']
+        old_pass = request.form['old_password']
+        new_pass = request.form['new_password']
+        conf_pass = request.form['confirm_password']
+
+        if new_pass != conf_pass:
+            error = 'Passwords do not match'
+        if old_pass is None or new_pass is None or conf_pass is None:
+            error = 'Password cannot be blank'
+        if not check_password_hash(old_pass, password):
+            error = 'Incorrect password.'
+
+        if error is not None:
+            db.execute(
+                'UPDATE user'
+                ' SET user_pass = ?,'
+                ' user_activated_flag = 1'
+                ' WHERE user_name = ?',
+                (generate_password_hash(new_pass), username,)
+            )
+
+            db.commit()
+
+            return render_template('auth/success.html')
+
+    return render_template(
+        'auth/change.html'
+    )
 
 def update_orgs():
     orgs = queries.get_active_orgs_for_current_user()
