@@ -26,6 +26,21 @@ def index():
         chart_data=chart_data
     )
 
+@bp.route('/about')
+def about():
+
+    return render_template(
+        'core/pages/about.html'
+    )
+
+
+@bp.route('/help')
+def help():
+
+    return render_template(
+        'core/pages/help.html'
+    )
+
 ##### Banking Core Module
 
 @bp.route('/accounts')
