@@ -188,6 +188,8 @@ def create_item(item):
         )
 
     if item == 'organisation':
+        org_types = queries.get_organisation_types()
+
         if request.method == 'POST':
             queries.create_organisation(request.form)
             update_orgs()
@@ -196,9 +198,9 @@ def create_item(item):
             )
 
         return render_template(
-            'core/forms/add_edit_org.html'
+            'core/forms/add_edit_org.html',
+            org_types= org_types
         )
-
 
 
 @bp.route('/category/<action>/<cat_id>', methods=['POST', 'GET'])
@@ -247,6 +249,7 @@ def show_organisations():
 @login_required
 def organisation(action, org_id):
     org = queries.get_org_by_id(org_id)
+    org_types = queries.get_organisation_types()
 
     if request.method == 'POST' and action == 'edit':
         queries.update_organistation(request.form, org_id)
@@ -256,9 +259,10 @@ def organisation(action, org_id):
         )
 
     return render_template(
-        'core/forms/org.html',
+        'core/forms/add_edit_org.html',
         org=org,
-        action=action
+        action=action,
+        org_types=org_types
     )
 
 

@@ -28,7 +28,7 @@
 
         {% for organisation in organisations %}
         <tr>
-            <td>{{ organisation['org_name'] }}</td>
+            <td><a href="{{ url_for('accounts.organisation', action='edit', org_id=organisation['org_id']) }}">{{ organisation['org_name'] }}</a></td>
             <td>
                 <a class="pl-0 dropdown-item" href="#">
                     {% if organisation['org_enabled_flag'] == 1 %}

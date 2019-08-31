@@ -125,6 +125,61 @@ def init_db():
              vat_type['vat_type_rate'], vat_type['vat_type_rtn_inc'])
         )
 
+    org_types = [
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Individual',
+            'org_type_cohouse_flag': 0
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Sole Trader',
+            'org_type_cohouse_flag': 0
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Limited Company',
+            'org_type_cohouse_flag': 1
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Partnership',
+            'org_type_cohouse_flag': 0
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Limited Liability Partnership',
+            'org_type_cohouse_flag': 1
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Community Interest Company',
+            'org_type_cohouse_flag': 0
+        },
+
+        {
+            'org_type_id': str(uuid4()),
+            'org_type_name': 'Other',
+            'org_type_cohouse_flag': 0
+        }
+    ]
+
+    for org_type in org_types:
+        db.execute(
+            'INSERT INTO organisation_type (org_type_id, org_type_name, org_type_cohouse_flag)'
+            ' VALUES (?, ?, ?)',
+            (
+                org_type['org_type_id'],
+                org_type['org_type_name'],
+                org_type['org_type_cohouse_flag']
+            )
+        )
+
     db.commit()
 
 

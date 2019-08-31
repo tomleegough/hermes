@@ -14,12 +14,25 @@ CREATE TABLE user (
     user_created_date TEXT
 );
 
+# TODO: add type and number to database
+
 DROP TABLE IF EXISTS organisation;
 CREATE TABLE organisation (
     org_id TEXT PRIMARY KEY,
     org_name TEXT,
     org_vat TEXT,
-    org_enabled_flag INTEGER
+    org_enabled_flag INTEGER,
+    org_type TEXT,
+    org_number TEXT
+);
+
+# TODO: add org_type table
+
+DROP TABLE IF EXISTS organisation_type;
+CREATE TABLE organisation_type (
+    org_type_id TEXT PRIMARY KEY,
+    org_type_name TEXT,
+    org_type_cohouse_flag INTEGER
 );
 
 DROP TABLE IF EXISTS user_organisation;

@@ -255,16 +255,25 @@ def create_organisation(form_data):
         'INSERT INTO organisation ('
         '   org_id,'
         '   org_name,'
-        '   org_enabled_flag'
+        '   org_enabled_flag,'
+        '   org_vat,'
+        '   org_no,'
+        '   org_type'
         ' ) VALUES ('
-        '   ?, '
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
         '   ?,'
         '   ?'
         ' )',
         (
             org_id,
             form_data['org_name'],
-            form_data['org_enabled_flag']
+            form_data['org_enabled_flag'],
+            form_data['org_vat'],
+            form_data['org_no'],
+            form_data['org_type']
         )
     )
 
@@ -276,6 +285,17 @@ def create_organisation(form_data):
 
 
     db.commit()
+
+
+def get_organisation_types():
+    db = get_db()
+
+    org_types = db.execute(
+        'SELECT *'
+        ' FROM organisation_type'
+    )
+
+    return org_types
 
 
 def add_org_permissions(user_id, org_id):
@@ -307,12 +327,18 @@ def update_organistation(form_data, org_id):
         '   organisation'
         ' SET'
         '   org_name = ?,'
-        '   org_enabled_flag = ?'
+        '   org_enabled_flag = ?,'
+        '   org_type = ?,'
+        '   org_vat = ?,'
+        '   org_number = ?'
         ' WHERE'
         '   org_id = ?',
         (
             form_data['org_name'],
             form_data['org_enabled_flag'],
+            form_data['org_type'],
+            form_data['org_vat'],
+            form_data['org_no'],
             org_id,
         )
     )

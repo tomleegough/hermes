@@ -52,7 +52,7 @@ def register():
     password for security.
     """
     if request.method == 'POST':
-        username = lower(request.form['username'])
+        username = str.lower(request.form['username'])
         password = request.form['password']
         # email = request.form['user_email']
         db = get_db()
@@ -118,7 +118,7 @@ def register():
 def login():
     """Log in a registered user by adding the user id to the session."""
     if request.method == 'POST':
-        username = lower(request.form['username'])
+        username = str.lower(request.form['username'])
         password = request.form['password']
         db = get_db()
         error = None
@@ -243,7 +243,7 @@ def activate_user():
         'auth/activate.html'
     )
 
-
+# TODO: Add a temp password field to database to randomer cannot reset user's password. Maybe. Have a think....
 @bp.route('/request_reset', methods=['POST', 'GET'])
 def request_reset():
 

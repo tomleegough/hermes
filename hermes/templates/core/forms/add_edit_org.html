@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Add new organisation{% endblock %}</h1>
+    <h1 class="text-capitalize">
+        {% block title %}
+            {{ action }} Organisation
+        {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -12,19 +15,44 @@
                 <div class="form-group row">
                     <label for="org_name" class="col-4 col-form-label">Organisation Name</label>
                     <div class="col-8">
-                        <input name="org_name" class="form-control" type="text" id="org_name">
+                        <input name="org_name" class="form-control" type="text" id="org_name" value="{{ org['org_name'] }}">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="org_enabled_flag" class="col-4 col-form-label">Organisation Enabled</label>
+                    <label for="org_type" class="col-4 col-form-label">Organisation Type</label>
+                    <div class="col-8">
+                        <select name="org_type" class="form-control" id="org_type">
+                            {% for type in org_types %}
+                                <option value="{{ type['org_type_id'] }}"{% if type['org_type_id'] == org['org_type'] %}selected{% endif %}>{{ type['org_type_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="org_no" class="col-4 col-form-label">Organisation Number</label>
+                    <div class="col-8">
+                        <input name="org_no" class="form-control" type="text" id="org_no" value="{{ org['org_number'] }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="org_vat" class="col-4 col-form-label">VAT Number</label>
+                    <div class="col-8">
+                        <input name="org_vat" class="form-control" type="text" id="org_vat" value="{{ org['org_vat'] }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label id="org_enabled_flag" for="org_enabled_flag" class="col-4 col-form-label">Organisation Enabled</label>
                     <div class="col-8">
                         <input name="org_enabled_flag" value="1" class="form-control" type="checkbox" checked>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <input type="submit" class="col btn btn-primary mt-3" value="Create Organisation">
+                    <input type="submit" class="col btn btn-primary mt-3 text-capitalize" value="{{ action }} Organisation">
                 </div>
 
             </form>
