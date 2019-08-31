@@ -14,7 +14,5 @@ Hermes is your favourite Grade 36 bureaucrat. It is also an accounting program w
  - Extra Modules
    - VAT module
    - Invoicing
- - Security
-   - Email as username, verification
  - Other
    - Make sure company is selected - URL decorator?
