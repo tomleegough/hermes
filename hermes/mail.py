@@ -40,7 +40,7 @@ def send_verification_email(recipient, user_activate_url):
                         <h1>Welcome to Hermes Accounting!</h1>
                         <p>Welcome to Hermes Accounting! Before you can log in with your newly created account. You will need to verify your email address.
                     </p>
-                        <p>To activate your account, follow this link <a href="{}auth/activate">{}}auth/activate</a> and enter your email and activation code, included in this email</p>
+                        <p>To activate your account, follow this link <a href="{}auth/activate">{}auth/activate</a> and enter your email and activation code, included in this email</p>
                         <p><b>Activation Code:</b> {} </p>
                         <p>Thank you for creating your account</p>
                     """.format(

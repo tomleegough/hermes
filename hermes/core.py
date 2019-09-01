@@ -199,7 +199,9 @@ def create_item(item):
 
         return render_template(
             'core/forms/add_edit_org.html',
-            org_types= org_types
+            org_types= org_types,
+            org='',
+            action='Create'
         )
 
 

@@ -17,7 +17,8 @@
             <th>Organisation</th>
             <th>Status</th>
             <th>Type</th>
-            <th></th>
+            <th>Organisation Number</th>
+            <th>VAT Number</th>
         </tr>
 
         {% if organisations== [] %}
@@ -38,8 +39,9 @@
                     {% endif %}
                 </a>
             </td>
-            <td></td>
-            <td></td>
+            <td>{{ organisation['org_type_name'] }}</td>
+            <td>{{ organisation['org_number'] }}</td>
+            <td>{{ organisation['org_vat'] }}</td>
         </tr>
         {% endfor %}
     </table>

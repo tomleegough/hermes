@@ -215,6 +215,8 @@ def get_all_orgs_for_current_user():
         '   organisation'
         ' JOIN'
         '   user_organisation on org_id = org_id_fk'
+        ' LEFT JOIN'
+        '   organisation_type on org_type = org_type_id'
         ' WHERE'
         '   user_id_fk = ?',
         (
@@ -257,7 +259,7 @@ def create_organisation(form_data):
         '   org_name,'
         '   org_enabled_flag,'
         '   org_vat,'
-        '   org_no,'
+        '   org_number,'
         '   org_type'
         ' ) VALUES ('
         '   ?,'

@@ -14,8 +14,6 @@ CREATE TABLE user (
     user_created_date TEXT
 );
 
-# TODO: add type and number to database
-
 DROP TABLE IF EXISTS organisation;
 CREATE TABLE organisation (
     org_id TEXT PRIMARY KEY,
@@ -25,8 +23,6 @@ CREATE TABLE organisation (
     org_type TEXT,
     org_number TEXT
 );
-
-# TODO: add org_type table
 
 DROP TABLE IF EXISTS organisation_type;
 CREATE TABLE organisation_type (
