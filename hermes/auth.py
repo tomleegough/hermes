@@ -15,8 +15,6 @@ import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-# TODO Force users to verify email address
-# TODO Make email for user unique in database
 
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""

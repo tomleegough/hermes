@@ -64,13 +64,18 @@ def init_db():
         },
         {
             'cat_type_id': str(uuid4()),
-            'cat_type_name': 'Income',
+            'cat_type_name': 'Equity',
             'cat_type_order': 5
         },
         {
             'cat_type_id': str(uuid4()),
-            'cat_type_name': 'Expense',
+            'cat_type_name': 'Income',
             'cat_type_order': 6
+        },
+        {
+            'cat_type_id': str(uuid4()),
+            'cat_type_name': 'Expense',
+            'cat_type_order': 7
         }
     ]
 
@@ -205,19 +210,32 @@ def generate_test_data():
     db.execute(
         'INSERT INTO user (user_id, user_name, user_pass, user_enabled_flag, user_last_org_id)'
         ' VALUES (?, ?, ?, ?, ?)',
-        (user_id, 'test-user', generate_password_hash('test-user'), 1, org_id)
+        (
+            user_id,
+            'test-user',
+            generate_password_hash('test-user'),
+            1,
+            org_id
+        )
     )
 
     # Generate the organisation
     db.execute(
         'INSERT INTO organisation (org_id, org_name, org_enabled_flag) VALUES (?, ?, ?)',
-        (org_id, 'TestCompany', 1)
+        (
+            org_id,
+            'TestCompany',
+            1
+        )
     )
 
     # Add user access to the company
     db.execute(
         'INSERT INTO user_organisation (org_id_fk, user_id_fk) VALUES (?, ?)',
-        (org_id, user_id)
+        (
+            org_id,
+            user_id
+        )
     )
 
     # generate bank accounts
@@ -277,14 +295,18 @@ def generate_test_data():
 
     income = db.execute(
         'SELECT cat_type_id FROM category_type WHERE cat_type_name=?',
-        ('Income',)
+        (
+            'Income',
+        )
     ).fetchone()
 
     income = income['cat_type_id']
 
     expense = db.execute(
         'SELECT cat_type_id FROM category_type WHERE cat_type_name=?',
-        ('Expense',)
+        (
+            'Expense',
+        )
     ).fetchone()
 
     expense = expense['cat_type_id']
@@ -398,16 +420,35 @@ def generate_test_data():
 
                 today = datetime.datetime.strftime(datetime.datetime.today(), '%Y-%m-%d')
 
-                db.execute(
-                    'INSERT INTO transactions'
-                    ' (trans_id, trans_post_date, trans_created_date,'
-                    ' trans_value_net, trans_description, user_id_fk,'
-                    ' org_id_fk, bank_id_fk, category_id_fk)'
-                    ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                    (str(uuid4()), trans_date, today,
-                     value, 'Test Transaction', user_id,
-                     org_id, account['bank_id'], category['category_id'],)
-                )
+                # db.execute(
+                #     'INSERT INTO transactions ('
+                #     '   trans_id,'
+                #     '   trans_post_date,'
+                #     '   trans_created_date,'
+                #     '   trans_value_net,'
+                #     '   trans_value_vat,'
+                #     '   trans_description,'
+                #     '   user_id_fk,'
+                #     '   org_id_fk,'
+                #     '   bank_id_fk,'
+                #     '   category_id_fk,'
+                #     '   vat_type_id_fk'
+                #     ' ) VALUES ('
+                #     '   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                #     {
+                #         str(uuid4()),
+                #         trans_date,
+                #         today,
+                #         value,
+                #         '0.00',
+                #         'Test Transaction',
+                #         user_id,
+                #         org_id,
+                #         account['bank_id'],
+                #         category['category_id'],
+                #         'OS'
+                #     }
+                # )
 
     db.commit()
 

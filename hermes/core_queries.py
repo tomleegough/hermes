@@ -6,6 +6,7 @@ from hermes.db import get_db
 from uuid import uuid4
 
 import datetime
+import random
 
 bp = Blueprint('queries', __name__)
 
@@ -121,8 +122,17 @@ def change_category_status(status_flag, cat_id):
     db.commit()
 
 
-def change_org_status(status_flag, org_id):
+def change_org_status(org_id):
     db = get_db()
+
+    org = get_org_by_id(org_id)
+
+    status_flag = org['org_enabled_flag']
+
+    if status_flag == 0:
+        status_flag = 1
+    else:
+        status_flag = 0
 
     db.execute(
         'UPDATE'
@@ -143,6 +153,8 @@ def change_org_status(status_flag, org_id):
 def create_category(form_data):
     db = get_db()
 
+    cat_id = str(uuid4())
+
     db.execute(
         'INSERT INTO categories ('
         '   category_id,'
@@ -158,7 +170,7 @@ def create_category(form_data):
         '   ?'
         ' )',
         (
-            str(uuid4()),
+            cat_id,
             form_data['cat_name'],
             form_data['active_flag'],
             session['current_org'],
@@ -167,6 +179,8 @@ def create_category(form_data):
     )
 
     db.commit()
+
+    return cat_id
 
 
 def update_category(form_data, cat_id):
@@ -284,9 +298,9 @@ def create_organisation(form_data):
         org_id,
     )
 
-
-
     db.commit()
+
+    return org_id
 
 
 def get_organisation_types():
@@ -398,10 +412,13 @@ def get_bank_accounts_for_current_org():
     return accounts
 
 
-def create_bank_account(form_data):
+def create_bank_account(form_data, org_id):
     db = get_db()
 
     bank_id = str(uuid4())
+
+    if org_id == '':
+        org_id = session['current_org']
 
     db.execute(
         'INSERT INTO bank ('
@@ -428,7 +445,7 @@ def create_bank_account(form_data):
             datetime.datetime.now().strftime('%Y-%m-%d'),
             form_data['bank_enabled_flag'],
             form_data['bank_currency_code'],
-            session['current_org']
+            org_id
         )
     )
 
@@ -438,7 +455,7 @@ def create_bank_account(form_data):
         '  vat_type'
         ' WHERE'
         '  vat_type_name = "Out of Scope"'
-    ).fetchall()
+    ).fetchone()
 
     db.commit()
 
@@ -448,7 +465,7 @@ def create_bank_account(form_data):
         'trans_value_net': form_data['open_balance'],
         'trans_value_vat': 0.00,
         'sign': 1,
-        'org_id_fk': session['current_org'],
+        'org_id_fk': org_id,
         'trans_created_date': datetime.datetime.now().strftime('%Y-%m-%d'),
         'bank_id': bank_id,
         'cat_id': '',
@@ -456,6 +473,8 @@ def create_bank_account(form_data):
     }
 
     create_transaction(o_bal)
+
+    return bank_id
 
 
 def create_transaction(trans_data):
@@ -599,6 +618,7 @@ def dashboard_graph():
 
     return values
 
+
 def get_vat_codes():
     db = get_db()
 
@@ -608,3 +628,269 @@ def get_vat_codes():
     ).fetchall()
 
     return vat_codes
+
+
+def create_standard_coa(coa):
+    db = get_db()
+
+    fixed_asset = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Fixed Assets"'
+    ).fetchone()
+
+    current_asset = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Current Liabilities"'
+    ).fetchone()
+
+    current_liability = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Current Liabilities"'
+    ).fetchone()
+
+    long_term_liability = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Long-term Liabilities"'
+    ).fetchone()
+
+    income = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Income"'
+    ).fetchone()
+
+    expense = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Expense"'
+    ).fetchone()
+
+    equity = db.execute(
+        'SELECT cat_type_id'
+        ' FROM category_type'
+        ' WHERE cat_type_name = "Equity"'
+    ).fetchone()
+
+    if coa == 'individual':
+        fixed_asset_categories = [
+            'House',
+            'Motor vehicles',
+            'Pension'
+        ]
+
+        for each in fixed_asset_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': fixed_asset['cat_type_id']
+            }
+
+            create_category(category)
+
+        liability_categories = [
+            'Mortgage'
+        ]
+
+        for each in liability_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': long_term_liability['cat_type_id']
+            }
+
+            create_category(category)
+
+        income_categories = [
+            'Salary',
+            'Interest'
+        ]
+
+        for each in income_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': income['cat_type_id']
+            }
+
+            create_category(category)
+
+        expense_categories = [
+            'Rent',
+            'Utilities',
+            'Phone',
+            'Internet',
+            'Insurance',
+            'Food',
+            'Holiday',
+            'Socializing',
+            'Other Expenses'
+        ]
+
+        for each in expense_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': expense['cat_type_id']
+            }
+
+            create_category(category)
+
+    if coa == 'limited':
+        fixed_asset_categories = [
+            'Plant and Machinery',
+            'Motor Vehicles',
+            'Fixtures and Fittings'
+        ]
+
+        for each in fixed_asset_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': fixed_asset['cat_type_id']
+            }
+
+            create_category(category)
+
+        asset_categories = [
+            'Debtors',
+            'Stock',
+            'Prepayments'
+        ]
+
+        for each in asset_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': current_asset['cat_type_id']
+            }
+
+            create_category(category)
+
+        current_liability_categories = [
+            'Creditors',
+            'Deferred Income',
+            'Taxes',
+            'Accruals'
+        ]
+
+        for each in current_liability_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': current_liability['cat_type_id']
+            }
+
+            create_category(category)
+
+        long_liability_categories = [
+            'Bank Loans',
+            'Directors Loan Account',
+            'Corporation Tax'
+        ]
+
+        for each in long_liability_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': long_term_liability['cat_type_id']
+            }
+
+            create_category(category)
+
+        income_categories = [
+            'Sales',
+            'Other Income'
+        ]
+
+        for each in income_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': income['cat_type_id']
+            }
+
+            create_category(category)
+
+        expense_categories = [
+            'Cost of Goods Sold',
+            'Rent and Rates',
+            'Utilities',
+            'Wages and Salaries',
+            'Travel Expenses',
+            'IT and Telecomms',
+            'Stationary and Postage',
+            'Professional and Legal Fees',
+            'Other Expenses',
+            'Depreciation',
+            'Tax'
+        ]
+
+        for each in expense_categories:
+            category = {
+                'cat_name': each,
+                'active_flag': 1,
+                'type_id': expense['cat_type_id']
+            }
+
+            create_category(category)
+
+
+    db.commit()
+
+
+def add_demo_data():
+    db = get_db()
+
+    org_type = db.execute(
+        'SELECT * FROM organisation_type'
+        ' WHERE org_type_name = "Limited Company"'
+    ).fetchone()
+
+    demo_org = {
+        "org_name": 'Hermes Demo Ltd',
+        "org_enabled_flag": 1,
+        "org_vat": "12 3456 789 GB",
+        "org_no": "12345678",
+        "org_type": org_type['org_type_id']
+    }
+
+    org_id = create_organisation(demo_org)
+
+    bank_accounts = [
+        {
+            'bank_name': 'Business Bank Account',
+            'bank_reference': 00-00-00-10000001,
+            'bank_enabled_flag': 1,
+            'bank_currency_code': 'gbp',
+            'open_date': datetime.date(2019, 1, 1),
+            'open_balance': round(random.random() * 10000, 2)
+        },
+
+        {
+            'bank_name': 'Overdrawn Account',
+            'bank_reference': 00 - 00 - 00 - 10000002,
+            'bank_enabled_flag': 1,
+            'bank_currency_code': 'gbp',
+            'open_date': datetime.date(2019, 1, 1),
+            'open_balance': round(random.random() * 1000, 2) * -1
+        },
+
+        {
+            'bank_name': 'Savings Account',
+            'bank_reference': 00 - 00 - 00 - 10000002,
+            'bank_enabled_flag': 1,
+            'bank_currency_code': 'gbp',
+            'open_date': datetime.date(2019, 1, 1),
+            'open_balance': round(random.random() * 100000, 2)
+        }
+
+    ]
+
+    for bank in bank_accounts:
+        bank_id = create_bank_account(bank, org_id)
+
+    db.commit()

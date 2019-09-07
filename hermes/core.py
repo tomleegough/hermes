@@ -144,6 +144,18 @@ def feedback():
     )
 
 
+@bp.route('/resetdemo')
+@login_required
+def reset_demo():
+
+    queries.add_demo_data()
+    update_orgs()
+
+    return redirect(
+        url_for('accounts.show_organisations')
+    )
+
+
 @bp.route('/<item>/change-status/<id>/<status_flag>')
 @login_required
 def change_status(item, id, status_flag):
@@ -236,6 +248,15 @@ def category(action, cat_id):
     )
 
 
+@bp.route('/categories/<coa>')
+@login_required
+def create_default_categories(coa):
+    queries.create_standard_coa(coa)
+
+    return redirect(
+        url_for('accounts.show_categories')
+    )
+
 ##### Organisations
 @bp.route('/organisations')
 @login_required
@@ -276,4 +297,14 @@ def change_org(org_id):
     session['current_org_name'] = org_data['org_name']
     return redirect(
         url_for('accounts.index')
+    )
+
+
+@bp.route('/organisation/change_status/<org_id>')
+@login_required
+def change_org_status(org_id):
+    queries.change_org_status(org_id)
+
+    return redirect(
+        url_for('accounts.show_organisations')
     )
