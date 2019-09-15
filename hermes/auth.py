@@ -72,6 +72,7 @@ def register():
             # the login page
 
             user_activate_url = str(uuid4())
+            user_id = str( uuid4())
 
             db.execute(
                 'INSERT INTO user('
@@ -87,7 +88,7 @@ def register():
                 '   ?, ?, ?, ?, ?, ?, ?, ?'
                 ' )',
                 (
-                    str( uuid4()) ,
+                    user_id,
                     username,
                     generate_password_hash( password ),
                     1,
@@ -97,6 +98,14 @@ def register():
                     datetime.datetime.now().strftime('%Y-%m-%d')
                 )
             )
+
+            db.execute(
+                'INSERT INTO settings (user_id_fk) VALUES (?)'
+                (
+                    user_id,
+                )
+            )
+
             db.commit()
 
             send_verification_email(username, user_activate_url)
@@ -137,7 +146,11 @@ def login():
             session['user_id'] = user['user_id']
             update_orgs()
             session['current_org'] = user['user_last_org_id']
-
+            theme = db.execute(
+                'SELECT settings_theme FROM settings WHERE user_id_fk=?',
+                (user['user_id'],)
+            ).fetchone()
+            session['theme'] = 'yeti.css'
             return redirect(
                 url_for('index')
             )

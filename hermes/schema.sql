@@ -95,3 +95,9 @@ CREATE TABLE vat_rtn(
     vat_rtn_start TEXT,
     vat_rtn_end TEXT
 );
+
+DROP TABLE IF EXISTS settings;
+CREATE TABLE settings(
+    settings_theme TEXT,
+    user_id_fk TEXT
+);

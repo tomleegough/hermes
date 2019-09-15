@@ -41,6 +41,7 @@ def help():
         'core/pages/help.html'
     )
 
+
 ##### Banking Core Module
 
 @bp.route('/accounts')
@@ -134,6 +135,24 @@ def show_categories():
         categories=categories
     )
 
+
+@bp.route('/settings', methods=['POST', 'GET'])
+@login_required
+def settings():
+
+    settings_data = queries.get_current_settings()
+
+    if request.method == 'POST':
+        queries.update_settings(request.form)
+        session['theme'] = request.form['settings_theme']
+        return redirect(
+            url_for('accounts.index')
+        )
+
+    return render_template(
+        'core/forms/settings.html',
+        settings=settings_data
+    )
 
 @bp.route('/feedback')
 @login_required

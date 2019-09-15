@@ -6,8 +6,9 @@
 
         <title>Hermes | {% block title %}{% endblock %}</title>
 
-<!--        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<!--        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">-->
+            <link rel="stylesheet" href="{{ url_for('static', filename='themes/' + session['theme']) }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <!--        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">-->
         <link rel="stylesheet" href="{{ url_for('static', filename='font_awesome/css/all.css') }} ">
@@ -70,7 +71,7 @@
                     Organisations</a>
                 <div class="dropdown-menu">
                     {% for org in session['orgs'] %}
-                    <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-dark text-light{% endif %}" href="{{ url_for('accounts.change_org', org_id=org['org_id'], return_url='o')}}">{{org['org_name']}}</a>
+                    <a class="nav-link dropdown-item {% if session['current_org'] == org['org_id'] %}bg-primary text-light{% endif %}" href="{{ url_for('accounts.change_org', org_id=org['org_id'], return_url='o')}}">{{org['org_name']}}</a>
                     {% endfor %}
                     <div class="dropdown-divider"></div>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_organisations') }}">Manage</a>
@@ -86,6 +87,7 @@
                     {{g.user['user_name']}}</a>
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('auth.change_pass') }}">Change Password</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.settings') }}">Settings</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.feedback') }}">Feedback</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.help') }}">Help</a>
                 </div>

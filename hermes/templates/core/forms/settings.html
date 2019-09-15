@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>Settings</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid row">
+        <div class="p-5 mx-auto">
+            <form method="post">
+                <div class="form-group row">
+                    <label for="settings_theme" class="col-4 col-form-label">Theme</label>
+                    <div class="col-8">
+                        <select name="settings_theme" class="form-control" id="settings_theme">
+                            <option value="">Default</option>
+                            <option value="cerulean.css">Cerulean</option>
+                            <option value="cosmo.css">Cosmo</option>
+                            <option value="cyborg.css">Cyborg</option>
+                            <option value="darkly.css">Darkly</option>
+                            <option value="flatly.css">Flatly</option>
+                            <option value="journal.css">Journal</option>
+                            <option value="minty.css">Minty</option>
+                            <option value="simplex.css">Simplex</option>
+                            <option value="yeti.css">Yeti</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <input
+                        type="submit"
+                        class="col btn btn-primary mt-3"
+                        value="Save Settings">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

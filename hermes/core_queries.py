@@ -894,3 +894,32 @@ def add_demo_data():
         bank_id = create_bank_account(bank, org_id)
 
     db.commit()
+
+
+def get_current_settings():
+    db = get_db()
+
+    settings = db.execute(
+        'SELECT * FROM settings WHERE user_id_fk = ?',
+        (
+            session['user_id'],
+        )
+    ).fetchone()
+
+    return settings
+
+
+def update_settings(form_data):
+    db = get_db()
+
+    db.execute(
+        'UPDATE settings'
+        ' SET settings_theme = ?'
+        ' WHERE user_id_fk = ?',
+        (
+            form_data['settings_theme'],
+            session['user_id'],
+        )
+    )
+
+    db.commit()
