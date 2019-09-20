@@ -585,7 +585,7 @@ def get_active_categories_for_current_org():
     return categories
 
 
-def dashboard_graph():
+def income_chart():
     db = get_db()
 
     from_date = datetime.datetime.now() - datetime.timedelta(days=365)
@@ -604,6 +604,40 @@ def dashboard_graph():
         ' WHERE'
         '   transactions.org_id_fk=? and'
         '   cat_type_name = "Income" and'
+        '   trans_post_date >= ?'
+        ' GROUP BY'
+        '   cat_type_name,'
+        '   period'
+        ' ORDER BY'
+        '   period',
+        (
+            session['current_org'],
+            from_date,
+        )
+    ).fetchall()
+
+    return values
+
+
+def expense_chart():
+    db = get_db()
+
+    from_date = datetime.datetime.now() - datetime.timedelta(days=365)
+    from_date = datetime.datetime.strftime(from_date, '%Y-%m-%d')
+
+    values = db.execute(
+        'SELECT'
+        '   strftime("%Y-%m-", trans_post_date)||"01" as period,'
+        '   sum(trans_value_net) as value'
+        ' FROM'
+        '   transactions'
+        ' JOIN'
+        '   categories on category_id = category_id_fk'
+        ' JOIN'
+        '   category_type on cat_type_id = cat_type_id_fk'
+        ' WHERE'
+        '   transactions.org_id_fk=? and'
+        '   cat_type_name = "Expense" and'
         '   trans_post_date >= ?'
         ' GROUP BY'
         '   cat_type_name,'

@@ -88,13 +88,13 @@ var ctx = document.getElementById('monthIncome').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [{% for each in chart_data %}
+        labels: [{% for each in income_chart %}
                     "{{ each['period'] }}",
                     {% endfor %}
         ],
         datasets: [{
             label: '',
-            data: [{% for each in chart_data %}
+            data: [{% for each in income_chart %}
                     {{ each['value'] }},
                     {% endfor %}
                 ]

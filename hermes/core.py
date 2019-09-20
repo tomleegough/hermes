@@ -17,13 +17,13 @@ def index():
 
     values = queries.category_values_for_current_org()
     accounts = queries.get_bank_accounts_for_current_org()
-    chart_data = queries.dashboard_graph()
+    income_chart = queries.income_chart()
 
     return render_template(
         'core/dashboard.html',
         categories=values,
         accounts=accounts,
-        chart_data=chart_data
+        income_chart=income_chart
     )
 
 @bp.route('/about')
