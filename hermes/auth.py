@@ -100,7 +100,7 @@ def register():
             )
 
             db.execute(
-                'INSERT INTO settings (user_id_fk) VALUES (?)'
+                'INSERT INTO settings (user_id_fk) VALUES (?)',
                 (
                     user_id,
                 )
@@ -147,10 +147,10 @@ def login():
             update_orgs()
             session['current_org'] = user['user_last_org_id']
             theme = db.execute(
-                'SELECT settings_theme FROM settings WHERE user_id_fk=?',
+                'SELECT * FROM settings WHERE user_id_fk=?',
                 (user['user_id'],)
             ).fetchone()
-            session['theme'] = 'yeti.css'
+            session['theme'] = theme['settings_theme']
             return redirect(
                 url_for('index')
             )
