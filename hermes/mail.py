@@ -2,15 +2,27 @@ from flask import Blueprint, request
 
 bp = Blueprint('mail', __name__)
 
+
+from hermes.db import get_db
+
 """
 This call sends a message to one recipient.
 """
 from mailjet_rest import Client
 
+
 # TODO: Generalise mailjet credentials to allow open source
 def send_verification_email(recipient, user_activate_url):
-    api_key = '82008b39bbf82b502c360991ab7285ae'
-    api_secret = 'c256ddbd33c9cdca18df3c2cf963d7b5'
+
+    db = get_db()
+
+    mailjet = db.execute(
+        'SELECT mj_api_key, mj_api_secret'
+        ' FROM global_settings'
+    ).fetchone()
+
+    api_key = mailjet['mj_api_key']
+    api_secret = mailjet['mj_api_secret']
     mailjet = Client(
         auth=(
             api_key,
@@ -23,7 +35,7 @@ def send_verification_email(recipient, user_activate_url):
         'Messages': [
             {
                 "From": {
-                    "Email": "tom@tlg-accounting.co.uk",
+                    "Email": mailjet['mj_api_from_email'],
                     "Name": "Hermes Mailbot"
                 },
 
@@ -57,8 +69,17 @@ def send_verification_email(recipient, user_activate_url):
     # print(result.json() )
 
 def send_password_reset(recipient, user_reset_url):
-    api_key = '82008b39bbf82b502c360991ab7285ae'
-    api_secret = 'c256ddbd33c9cdca18df3c2cf963d7b5'
+
+    db = get_db()
+
+    mailjet = db.execute(
+        'SELECT mj_api_key, mj_api_secret'
+        ' FROM global_settings'
+    ).fetchone()
+
+    api_key = mailjet['mj_api_key']
+    api_secret = mailjet['mj_api_secret']
+
     mailjet = Client(
         auth=(
             api_key,
@@ -71,7 +92,7 @@ def send_password_reset(recipient, user_reset_url):
         'Messages': [
             {
                 "From": {
-                    "Email": "tom@tlg-accounting.co.uk",
+                    "Email": mailjet['mj_api_from_email'],
                     "Name": "Hermes Mailbot"
                 },
 

@@ -91,7 +91,10 @@
                     {{g.user['user_name']}}</a>
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('auth.change_pass') }}">Change Password</a>
-                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.settings') }}">Settings</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.settings') }}">User Settings</a>
+                    {% if session['group'] == 'admin' %}
+                        <a class="nav-link dropdown-item" href="{{ url_for('accounts.global_settings') }}">Global Settings</a>
+                    {% endif %}
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.feedback') }}">Feedback</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.help') }}">Help</a>
                 </div>
@@ -107,8 +110,8 @@
         {% endif %}
     </nav>
 
-    <div class="container-fluid">
-        <div class="">
+    <div class="container-fluid mb-5">
+        <div class="pb-5">
             <main role="main" class="mx-auto">
 
                 <header class="mt-3">

@@ -943,6 +943,16 @@ def get_current_settings():
     return settings
 
 
+def get_current_global_settings():
+    db = get_db()
+
+    settings = db.execute(
+        'SELECT * FROM global_settings'
+    ).fetchone()
+
+    return settings
+
+
 def update_settings(form_data):
     db = get_db()
 
@@ -953,6 +963,28 @@ def update_settings(form_data):
         (
             form_data['settings_theme'],
             session['user_id'],
+        )
+    )
+
+    db.commit()
+
+def update_global_settings(form_data):
+    db = get_db()
+
+    db.execute(
+        'UPDATE global_settings'
+        ' SET'
+        '    mj_api_key = ?,'
+        '    mj_api_secret = ?,'
+        '    mj_api_from_email = ?,'
+        '    companies_house_api_key = ?'
+        ' WHERE'
+        '   global_id = 1',
+        (
+            form_data['mj_api_key'],
+            form_data['mj_api_secret'],
+            form_data['mj_api_from_email'],
+            form_data['companies_house_api_key'],
         )
     )
 

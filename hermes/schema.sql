@@ -11,7 +11,8 @@ CREATE TABLE user (
     user_activate_url TEXT,
     user_activate_url_expiry TEXT,
     user_last_org_id TEXT,
-    user_created_date TEXT
+    user_created_date TEXT,
+    user_group TEXT
 );
 
 DROP TABLE IF EXISTS organisation;
@@ -99,5 +100,16 @@ CREATE TABLE vat_rtn(
 DROP TABLE IF EXISTS settings;
 CREATE TABLE settings(
     settings_theme TEXT,
+    companies_house_api_key TEXT,
     user_id_fk TEXT
 );
+
+DROP TABLE IF EXISTS global_settings;
+CREATE TABLE global_settings(
+    global_id TEXT,
+    mj_api_key TEXT,
+    mj_api_secret TEXT,
+    companies_house_api_key TEXT
+);
+
+INSERT INTO global_settings (global_id) VALUES (1);

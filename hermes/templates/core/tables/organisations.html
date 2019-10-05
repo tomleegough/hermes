@@ -20,6 +20,7 @@
             <th>Type</th>
             <th>Organisation Number</th>
             <th>VAT Number</th>
+            <th>Actions</th>
         </tr>
 
         {% if organisations== [] %}
@@ -43,6 +44,13 @@
             <td>{{ organisation['org_type_name'] }}</td>
             <td>{{ organisation['org_number'] }}</td>
             <td>{{ organisation['org_vat'] }}</td>
+            <td>
+                {% if organisation['org_number'] != None %}
+                <a href="{{ url_for('companies_house.get_companies_house_data', org_no=organisation['org_number']) }}">
+                    Companies House Data
+                </a>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>

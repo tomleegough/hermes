@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Companies House Data{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card-deck mt-5">
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary">
+                <h3 class="card-title">Company Details</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Company Name</span>
+                        <span class="col">{{ company_data['company_name'] }}</span>
+                    </li>
+
+                    <li class="row mt-3">
+                        <span class="col font-weight-bold">Company Number</span>
+                        <span class="col">{{ company_data['company_number'] }}</span>
+                    </li>
+
+                    <li class="row mt-3">
+                        <span class="col font-weight-bold">Incorporation Date</span>
+                        <span class="col">{{ company_data['date_of_creation'] }}</span>
+                    </li>
+
+                    <li class="row mt-3">
+                        <span class="col font-weight-bold">Company Status</span>
+                        <span class="col text-capitalize">{{ company_data['company_status'] }}</span>
+                    </li>
+
+                    <li class="row mt-3">
+                        <span class="col font-weight-bold">SIC Codes</span>
+                        <span class="col">
+                            <ul class="list-unstyled">
+                            {% for code in company_data['sic_codes'] %}
+                                <li class="">{{ code }}</li>
+                            {% endfor %}
+                            </ul>
+                        </span>
+                    </li>
+
+                    <li class="row mt-3">
+                        <span class="col font-weight-bold">Registered Office</span>
+                        <span class="col">
+                            <ul class="list-unstyled">
+                                <li>{{ company_data['registered_office_address']['address_line_1'] }}</li>
+                                <li>{{ company_data['registered_office_address']['locality'] }}</li>
+                                <li>{{ company_data['registered_office_address']['postal_code'] }}</li>
+                                <li>{{ company_data['registered_office_address']['country'] }}</li>
+                            </ul>
+                        </span>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary">
+                <h3 class="card-title">Previous Names</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-striped">
+                    <tr class="bg-secondary">
+                        <th>Name</th>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+
+                    <tr>
+                        <td>{{ company_data['company_name'] }}</td>
+                        <td colspan="2">Current</td>
+                    </tr>
+
+                {% for each in company_data['previous_company_names'] %}
+                    <tr>
+                        <td>{{each['name']}}</td>
+                        <td>{{each['effective_from']}}</td>
+                        <td>{{each['ceased_on']}}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['accounts']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Accounts</h3>
+            </div>
+            <div class="card-body">
+                <h4>Next Accounts</h4>
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Due</span>
+                        <span class="col">{{ company_data['accounts']['next_due'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Made Up To</span>
+                        <span class="col">{{ company_data['accounts']['next_made_up_to'] }}</span>
+                    </li>
+                </ul>
+
+                <h4>Last Accounts</h4>
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Period End</span>
+                        <span class="col">{{ company_data['accounts']['last_accounts']['period_end_on'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Period Start</span>
+                        <span class="col">{{ company_data['accounts']['last_accounts']['period_start_on'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Accounts Type</span>
+                        <span class="col">{{ company_data['accounts']['last_accounts']['type'] }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Confirmation Statement</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Due</span>
+                        <span class="col">{{ company_data['confirmation_statement']['next_due'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Made Up To</span>
+                        <span class="col">{{ company_data['confirmation_statement']['next_made_up_to'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Last Made Up To</span>
+                        <span class="col">{{ company_data['confirmation_statement']['last_made_up_to'] }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-deck mt-5">
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Company Officers</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for officer in officers['items'] %}
+                        <li class="row">
+                            <span class="col font-weight-bold">Name</span>
+                            <span class="col">{{ officer['name'] }}</span>
+                        </li>
+
+                        <li class="row">
+                            <span class="col font-weight-bold">Company Role</span>
+                            <span class="col text-capitalize">{{ officer['officer_role'] }}</span>
+                        </li>
+
+                        <li class="row">
+                            <span class="col font-weight-bold">Nationality</span>
+                            <span class="col text-capitalize">{{ officer['nationality'] }}</span>
+                        </li>
+
+                        <li class="row">
+                            <span class="col font-weight-bold">Occupation</span>
+                            <span class="col">{{ officer['occupation'] }}</span>
+                        </li>
+
+                        <li class="row">
+                            <span class="col font-weight-bold">Country of Residence</span>
+                            <span class="col">{{ officer['country_of_residence'] }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

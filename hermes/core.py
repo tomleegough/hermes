@@ -2,7 +2,11 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 
-from hermes.auth import login_required
+import requests
+
+from hermes.auth import (
+    login_required, group_admin
+)
 from hermes.auth import update_orgs
 import hermes.core_queries as queries
 
@@ -152,6 +156,30 @@ def settings():
     return render_template(
         'core/forms/settings.html',
         settings=settings_data
+    )
+
+
+@bp.route('/settings/global', methods=['POST', 'GET'])
+@login_required
+@group_admin
+def global_settings():
+
+    settings_data = queries.get_current_global_settings()
+
+    if request.method == 'POST':
+        queries.update_global_settings(request.form)
+
+        flash('Settings saved!')
+
+        return redirect(
+            url_for(
+                'accounts.global_settings'
+            )
+        )
+
+    return render_template(
+        'core/forms/global_settings.html',
+        global_settings=settings_data
     )
 
 @bp.route('/feedback')
@@ -326,4 +354,17 @@ def change_org_status(org_id):
 
     return redirect(
         url_for('accounts.show_organisations')
+    )
+
+@bp.route('/organisation/companies_house/<org_id>/<org_no>')
+def companies_house(org_id, org_no):
+
+    url = 'https://api.companieshouse.gov.uk/company/' + org_no
+
+    r = requests.get(url)
+
+    return(
+        render_template(
+            'core/pages/companies_house.html'
+        )
     )

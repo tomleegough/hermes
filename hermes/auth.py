@@ -28,6 +28,25 @@ def login_required(view):
     return wrapped_view
 
 
+def group_admin(view):
+    """View decorator that checks the user group is admin."""
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        db = get_db()
+
+        user = db.execute(
+            'SELECT * FROM user WHERE user_id = ?',
+            (session['user_id'],)
+        ).fetchone()
+
+        if user['user_group'] != 'admin':
+            return redirect(url_for('accounts.index'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
+
 @bp.before_app_request
 def load_logged_in_user():
     """If a user id is stored in the session, load the user object from
@@ -100,7 +119,7 @@ def register():
             )
 
             db.execute(
-                'INSERT INTO settings (user_id_fk) VALUES (?)',
+                'INSERT INTO settings (user_id_fk, settings_theme) VALUES (?, flatly.css)',
                 (
                     user_id,
                 )
@@ -151,6 +170,7 @@ def login():
                 (user['user_id'],)
             ).fetchone()
             session['theme'] = theme['settings_theme']
+            session['group'] = user['user_group']
             return redirect(
                 url_for('index')
             )
