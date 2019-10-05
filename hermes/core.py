@@ -2,8 +2,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 
-import requests
-
 from hermes.auth import (
     login_required, group_admin
 )
@@ -35,6 +33,13 @@ def about():
 
     return render_template(
         'core/pages/about.html'
+    )
+
+@bp.route('/licence')
+def licence():
+
+    return render_template(
+        'core/pages/licence.html'
     )
 
 
@@ -354,17 +359,4 @@ def change_org_status(org_id):
 
     return redirect(
         url_for('accounts.show_organisations')
-    )
-
-@bp.route('/organisation/companies_house/<org_id>/<org_no>')
-def companies_house(org_id, org_no):
-
-    url = 'https://api.companieshouse.gov.uk/company/' + org_no
-
-    r = requests.get(url)
-
-    return(
-        render_template(
-            'core/pages/companies_house.html'
-        )
     )

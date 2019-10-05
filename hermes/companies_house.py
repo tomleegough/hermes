@@ -1,14 +1,13 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session
+    Blueprint, render_template
 )
 
 import requests
 
 from hermes.auth import (
-    login_required, group_admin
+    login_required
 )
 import hermes.core_queries as queries
-import json
 
 bp = Blueprint('companies_house', __name__)
 

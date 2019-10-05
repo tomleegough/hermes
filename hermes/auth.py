@@ -142,7 +142,7 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    """Log in a registered user by adding the user id to the session."""
+    """Login a registered user by adding the user id to the session."""
     if request.method == 'POST':
         username = str.lower(request.form['username'])
         password = request.form['password']

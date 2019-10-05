@@ -11,7 +11,6 @@ This call sends a message to one recipient.
 from mailjet_rest import Client
 
 
-# TODO: Generalise mailjet credentials to allow open source
 def send_verification_email(recipient, user_activate_url):
 
     db = get_db()
@@ -50,7 +49,7 @@ def send_verification_email(recipient, user_activate_url):
                 "HTMLPart":
                     """
                         <h1>Welcome to Hermes Accounting!</h1>
-                        <p>Welcome to Hermes Accounting! Before you can log in with your newly created account. You will need to verify your email address.
+                        <p>Welcome to Hermes Accounting! Before you can Login with your newly created account. You will need to verify your email address.
                     </p>
                         <p>To activate your account, follow this link <a href="{}auth/activate">{}auth/activate</a> and enter your email and activation code, included in this email</p>
                         <p><b>Activation Code:</b> {} </p>

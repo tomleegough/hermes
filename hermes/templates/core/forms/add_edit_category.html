@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1> {{ action }} Category </h1>
+    <h1>{% block title %} {{ action }} Category {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
