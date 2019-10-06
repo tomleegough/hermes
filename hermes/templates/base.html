@@ -8,9 +8,7 @@
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-        {% if session == None %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='themes/flatly.css') }}">
-        {% elif theme in session %}
+        {% if session != {} %}
             <link rel="stylesheet" href="{{ url_for('static', filename='themes/' + session['theme']) }}">
         {% else %}
             <link rel="stylesheet" href="{{ url_for('static', filename='themes/flatly.css') }}">

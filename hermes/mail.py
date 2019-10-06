@@ -22,6 +22,8 @@ def send_verification_email(recipient, user_activate_url):
 
     api_key = mailjet['mj_api_key']
     api_secret = mailjet['mj_api_secret']
+    from_email = mailjet['mj_api_from_email']
+
     mailjet = Client(
         auth=(
             api_key,
@@ -34,7 +36,7 @@ def send_verification_email(recipient, user_activate_url):
         'Messages': [
             {
                 "From": {
-                    "Email": mailjet['mj_api_from_email'],
+                    "Email": from_email,
                     "Name": "Hermes Mailbot"
                 },
 
@@ -72,12 +74,13 @@ def send_password_reset(recipient, user_reset_url):
     db = get_db()
 
     mailjet = db.execute(
-        'SELECT mj_api_key, mj_api_secret'
+        'SELECT mj_api_key, mj_api_secret, mj_api_from_email'
         ' FROM global_settings'
     ).fetchone()
 
     api_key = mailjet['mj_api_key']
     api_secret = mailjet['mj_api_secret']
+    from_email = mailjet['mj_api_from_email']
 
     mailjet = Client(
         auth=(
@@ -91,7 +94,7 @@ def send_password_reset(recipient, user_reset_url):
         'Messages': [
             {
                 "From": {
-                    "Email": mailjet['mj_api_from_email'],
+                    "Email": from_email,
                     "Name": "Hermes Mailbot"
                 },
 
