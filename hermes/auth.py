@@ -119,7 +119,7 @@ def register():
             )
 
             db.execute(
-                'INSERT INTO settings (user_id_fk, settings_theme) VALUES (?, flatly.css)',
+                'INSERT INTO settings (user_id_fk, settings_theme) VALUES (?, "flatly.css")',
                 (
                     user_id,
                 )
@@ -166,10 +166,13 @@ def login():
             update_orgs()
             session['current_org'] = user['user_last_org_id']
             theme = db.execute(
-                'SELECT * FROM settings WHERE user_id_fk=?',
+                'SELECT * FROM user JOIN settings on user_id = user_id_fk WHERE user_id_fk=?',
                 (user['user_id'],)
             ).fetchone()
-            session['theme'] = theme['settings_theme']
+            if theme['settings_theme'] != None or theme['settings_theme'] != '':
+                session['theme'] = theme['settings_theme']
+            else:
+                session['theme'] = 'flatly.css'
             session['group'] = user['user_group']
             return redirect(
                 url_for('index')
