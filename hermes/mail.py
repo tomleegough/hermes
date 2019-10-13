@@ -16,7 +16,7 @@ def send_verification_email(recipient, user_activate_url):
     db = get_db()
 
     mailjet = db.execute(
-        'SELECT mj_api_key, mj_api_secret'
+        'SELECT mj_api_key, mj_api_secret, mj_api_from_email'
         ' FROM global_settings'
     ).fetchone()
 
