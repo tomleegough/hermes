@@ -169,7 +169,7 @@ def login():
                 'SELECT * FROM user JOIN settings on user_id = user_id_fk WHERE user_id_fk=?',
                 (user['user_id'],)
             ).fetchone()
-            if theme['settings_theme'] != None or theme['settings_theme'] != '':
+            if theme['settings_theme'] is not None or theme['settings_theme'] != '':
                 session['theme'] = theme['settings_theme']
             else:
                 session['theme'] = 'flatly.css'
@@ -277,7 +277,6 @@ def activate_user():
         'auth/activate.html'
     )
 
-# TODO: Add a temp password field to database to randomer cannot reset user's password. Maybe. Have a think....
 @bp.route('/request_reset', methods=['POST', 'GET'])
 def request_reset():
 

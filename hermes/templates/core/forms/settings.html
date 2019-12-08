@@ -11,21 +11,22 @@
             <form method="post">
 
                 <h2>Appearence</h2>
-
                 <div class="form-group row">
                     <label for="settings_theme" class="col-4 col-form-label">Theme</label>
                     <div class="col-8">
-                        <select name="settings_theme" class="form-control" id="settings_theme">
+                        <select name="settings_theme" class="form-control text-capitalize" id="settings_theme">
                             <option value="">Default</option>
-                            <option value="cerulean.css">Cerulean</option>
-                            <option value="cosmo.css">Cosmo</option>
-                            <option value="cyborg.css">Cyborg</option>
-                            <option value="darkly.css">Darkly</option>
-                            <option value="flatly.css">Flatly</option>
-                            <option value="journal.css">Journal</option>
-                            <option value="minty.css">Minty</option>
-                            <option value="simplex.css">Simplex</option>
-                            <option value="yeti.css">Yeti</option>
+                            {% for theme in ['cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'minty', 'simplex', 'yeti'] %}
+                            <option
+                                value="{{theme}}.css"
+                                class="text-capitalize"
+                                {% if theme == settings['settings_theme'][:-4] %}
+                                selected
+                                {% endif %}
+                            >
+                                {{theme}}
+                            </option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>

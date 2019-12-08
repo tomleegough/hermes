@@ -2,13 +2,11 @@
 
 {% block header %}
     <h1>
-        {% block title %}
-            {% if session['current_org_name'] != '' %}
-                {{ session['current_org_name'] }}
-            {% else %}
-                Dashboard
-            {% endif %}
-        {% endblock %}
+        {% if session['current_org_name'] != '' %}
+            {% block title %}{{ session['current_org_name'] }}{% endblock %}
+        {% else %}
+            Dashboard
+        {% endif %}
     </h1>
 {% endblock %}
 

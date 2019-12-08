@@ -50,6 +50,13 @@ def help():
         'core/pages/help.html'
     )
 
+@bp.route('/feedback')
+@login_required
+def feedback():
+
+    return render_template(
+        'core/pages/feedback.html'
+    )
 
 ##### Banking Core Module
 
@@ -185,14 +192,6 @@ def global_settings():
     return render_template(
         'core/forms/global_settings.html',
         global_settings=settings_data
-    )
-
-@bp.route('/feedback')
-@login_required
-def feedback():
-
-    return render_template(
-        'core/pages/feedback.html'
     )
 
 

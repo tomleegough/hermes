@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %}VAT MTD{% endblock %}</h1>
+
+{% block toolbar %}
+    <div class="mb-2">
+            <a role="button" class="btn btn-outline-dark" href="{{ url_for('vat_mtd.hello_world', end_point='world') }}">Hello World</a>
+            <a role="button" class="btn btn-outline-dark" href="{{ url_for('vat_mtd.hello_world', end_point='user') }}">Hello User</a>
+            <a role="button" class="btn btn-outline-dark" href="{{ url_for('vat_mtd.hello_world', end_point='application') }}">Hello Application</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {{response}}
+
+{% endblock %}

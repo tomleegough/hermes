@@ -401,10 +401,12 @@ def get_bank_accounts_for_current_org():
         ' LEFT JOIN'
         '   transactions on bank_id = bank_id_fk'
         ' WHERE'
-        '   bank.org_id_fk = ?'
+        '   bank.org_id_fk = ? and'
+        '   transactions.org_id_fk = ?'
         ' GROUP BY'
         '   bank_id',
         (
+            session['current_org'],
             session['current_org'],
         )
     ).fetchall()
@@ -532,9 +534,11 @@ def get_bank_account(bank_id):
         ' FROM'
         '   bank'
         ' WHERE'
-        '   bank_id = ?',
+        '   bank_id = ? and'
+        '   org_id_fk = ?',
         (
             bank_id,
+            session['org_id'],
         )
     ).fetchone()
 
@@ -971,13 +975,22 @@ def update_settings(form_data):
 def update_global_settings(form_data):
     db = get_db()
 
+    if 'mtd_prod_switch' not in form_data:
+        switch_value = 'off'
+    else:
+        switch_value = form_data['mtd_prod_switch']
+
     db.execute(
         'UPDATE global_settings'
         ' SET'
         '    mj_api_key = ?,'
         '    mj_api_secret = ?,'
         '    mj_api_from_email = ?,'
-        '    companies_house_api_key = ?'
+        '    companies_house_api_key = ?,'
+        '    mtd_client_id = ?,'
+        '    mtd_client_secrets = ?,'
+        '    mtd_server_token = ?,'
+        '    mtd_prod_status = ?'
         ' WHERE'
         '   global_id = 1',
         (
@@ -985,7 +998,34 @@ def update_global_settings(form_data):
             form_data['mj_api_secret'],
             form_data['mj_api_from_email'],
             form_data['companies_house_api_key'],
+            form_data['mtd_client_id'],
+            form_data['mtd_client_secrets'],
+            form_data['mtd_server_token'],
+            switch_value,
         )
     )
 
     db.commit()
+
+
+def get_vat_transactions():
+    db = get_db()
+
+    vat_trans = db.exectute(
+        'SELECT'
+        '   sum(trans_value_net),'
+        '   sum(trans_value_vat),'
+        '   cat_type_name,'
+        '   vat_type_id_fk,'
+        '   vat_rtn_id_fk'
+        ' FROM'
+        '   transactions'
+        ' JOIN categories on category_id = category_id_fk'
+        ' JOIN category_type on cat_type_id = cat_type_id_fk'
+        ' WHERE'
+        '   transactions.trans_post_date >= ? and'
+        '   transactions.trans_post_data <= ?'
+        ' group by'
+        '   cat_type_name,'
+        '   vat_type_id_fk'
+    ).fetchall()

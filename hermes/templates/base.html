@@ -7,8 +7,7 @@
         <title>Hermes | {% block title %}{% endblock %}</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-        {% if session != {} %}
+        {% if session is defined and session != {} %}
             <link rel="stylesheet" href="{{ url_for('static', filename='themes/' + session['theme']) }}">
         {% else %}
             <link rel="stylesheet" href="{{ url_for('static', filename='themes/flatly.css') }}">
@@ -22,6 +21,7 @@
     </head>
 
     <body>
+
     <nav class="navbar navbar-dark sticky-top bg-primary shadow">
         <a class="navbar-brand" href="{{ url_for('index') }}">Hermes Accounting</a>
 
@@ -55,6 +55,7 @@
 
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_categories') }}">Categories</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('vat_mtd.vat_index') }}">VAT Returns</a>
                 </div>
             </li>
 
