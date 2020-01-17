@@ -244,7 +244,7 @@ def create_item(item):
             )
 
         return render_template(
-            'core/forms/add_edit_category.html',
+            'core/forms/category.html',
             category='',
             cat_types= cat_types,
             action='Create'
@@ -261,7 +261,7 @@ def create_item(item):
             )
 
         return render_template(
-            'core/forms/add_edit_org.html',
+            'core/forms/organisation.html',
             org_types= org_types,
             org='',
             action='Create'
@@ -333,7 +333,7 @@ def organisation(action, org_id):
         )
 
     return render_template(
-        'core/forms/add_edit_org.html',
+        'core/forms/organisation.html',
         org=org,
         action=action,
         org_types=org_types

@@ -163,6 +163,7 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['user_id']
+            session['id'] = str(uuid4())
             update_orgs()
             session['current_org'] = user['user_last_org_id']
             theme = db.execute(
