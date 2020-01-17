@@ -1,14 +1,9 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>
+    <h1 class="text-capitalize">
         {% block title %}
-            {% if action == 'add' %}
-                {{'Add new'}}
-            {% else %}
-                {{'Edit'}}
-            {% endif %}
-        {{'Category'}}
+            {{ action }} Category
         {% endblock %}
     </h1>
 {% endblock %}
@@ -48,11 +43,7 @@
                     <input
                         type="submit"
                         class="col btn btn-primary mt-3"
-                        value="{% if action == 'add' %}
-                                {{'Create Category'}}
-                               {% else %}
-                                {{'Edit Category'}}
-                               {% endif %}">
+                        value="{{ action }}">
                 </div>
 
             </form>

@@ -16,8 +16,9 @@
         <h1>Add bank accounts</h1>
     {% else %}
         {% for account in accounts %}
+            {% if account['row_no']%3 == '0' %}<div class="card-group">{% endif %}
             <div class="
-                card
+            hmrc    card
                 shadow
                 mt-5
                 {% if account['bank_balance'] < 0 %}
@@ -60,6 +61,7 @@
                     </ul>
                 </div>
             </div>
+            {% if account['row_no']%3 == 0 %}</div>{% endif %}
         {% endfor %}
     {% endif %}
 

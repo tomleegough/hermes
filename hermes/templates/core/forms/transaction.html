@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>
+    <h1 class="text-capitalize">
         {% block title %}
-            {% if action == 'add' %}
-                {{'Add Bank Entry'}} 
-            {% else %}
-                {{'Edit Bank Entry'}}
-            {% endif %}
+            {{action}} Bank Transaction
         {% endblock %}
     </h1>
 {% endblock %}
@@ -94,7 +90,11 @@
                 </div>
 
                 <div class="form-group row">
-                    <input type="submit" class="col btn btn-primary mt-3" value="Submit Bank Entry">
+                    <input
+                            type="submit"
+                            class="col btn btn-primary mt-3 text-capitalize"
+                            value="{{ action }}"
+                    >
                 </div>
 
             </form>
