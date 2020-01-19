@@ -75,7 +75,10 @@ def show_accounts():
 def create_account():
 
     if request.method == 'POST':
-        queries.create_bank_account(request.form)
+        queries.create_bank_account(
+            request.form,
+            session['current_org']
+        )
         return redirect(
             url_for('accounts.show_accounts')
         )

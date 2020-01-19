@@ -8,18 +8,18 @@ VAT MTD Sandbox Implementation
 
 ### SQL
 
-ALTER TABLE globals
+ALTER TABLE global_settings
 ADD COLUMN mtd_client_id TEXT;
 
-ALTER TABLE globals
+ALTER TABLE global_settings
 ADD COLUMN mtd_client_secrets TEXT;
 
-ALTER TABLE globals
+ALTER TABLE global_settings
 ADD COLUMN mtd_server_token text;
 
-ALTER TABLE globals
+ALTER TABLE global_settings
 ADD COLUMN mtd_prod_status TEXT;
-UPDATE globals set mtd_prod_status = 'off';
+UPDATE global_settings set mtd_prod_status = 'off';
 
 CREATE TABLE vat_mtd (
     user_id_fk TEXT,

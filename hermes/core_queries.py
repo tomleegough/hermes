@@ -465,7 +465,7 @@ def create_bank_account(form_data, org_id):
             datetime.datetime.now().strftime('%Y-%m-%d'),
             form_data['bank_enabled_flag'],
             form_data['bank_currency_code'],
-            org_id
+            org_id,
         )
     )
 
