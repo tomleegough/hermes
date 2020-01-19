@@ -23,22 +23,30 @@ def get_companies_house_data(org_no):
         'Authorization': api_key
     }
 
-    response = requests.get(
+    company_data = requests.get(
         url + org_no,
-        headers=headers
+        headers= headers
     )
 
-    company_data = response.json()
-
-    response = requests.get(
+    officers = requests.get(
         url + org_no + '/officers',
-        headers=headers
+        headers= headers
     )
 
-    officers = response.json()
+    accounts = requests.get(
+        url + org_no + '/filing-history?category=accounts',
+        headers= headers
+    )
+
+    conf_statement = requests.get(
+        url + org_no + '/filing-history?category=confirmation-statement',
+        headers=headers
+    )
 
     return render_template(
         'modules/companies_house.html',
-        company_data=company_data,
-        officers= officers
+        company_data=company_data.json(),
+        officers= officers.json(),
+        accounts= accounts.json(),
+        conf_statement= conf_statement.json()
     )

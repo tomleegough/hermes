@@ -22,7 +22,11 @@
 
                     <li class="row mt-3">
                         <span class="col font-weight-bold">Company Number</span>
-                        <span class="col">{{ company_data['company_number'] }}</span>
+                        <span class="col">
+                            <a target="_blank" href="https://beta.companieshouse.gov.uk/company/{{ company_data['company_number'] }}">
+                                {{ company_data['company_number'] }}
+                            </a>
+                        </span>
                     </li>
 
                     <li class="row mt-3">
@@ -63,6 +67,141 @@
         </div>
 
         <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['accounts']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Accounts</h3>
+            </div>
+            <div class="card-body">
+
+<!--                <h4>Next Accounts</h4>-->
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Due</span>
+                        <span class="col">{{ company_data['accounts']['next_due'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Made Up To</span>
+                        <span class="col">{{ company_data['accounts']['next_made_up_to'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Last Made Up To</span>
+                        <span class="col">{{ company_data['accounts']['last_accounts']['made_up_to'] }}</span>
+                    </li>
+                </ul>
+
+                <h4>Filing History</h4>
+                    <div class="col">
+                        <table class="table table-sm table-striped">
+                            <tr class="row">
+                                <th class="col">Filed</th>
+                                <th class="col">Made up to</th>
+                                <th class="col">Description</th>
+                            </tr>
+                            {% for item in accounts['items'] %}
+                            <tr class="row">
+                                <td class="col">{{item['date']}}</td>
+                                <td class="col">{{item['action_date']}}</td>
+                                <td class="col text-capitalize">
+                                    <a
+                                        target="_blank"
+                                        href="https://beta.companieshouse.gov.uk{{item['links']['self']}}/document?format=pdf&download=0"
+                                    >
+                                        {{item['description'].replace('-',' ')}}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Confirmation Statement</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Due</span>
+                        <span class="col">{{ company_data['confirmation_statement']['next_due'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Next Made Up To</span>
+                        <span class="col">{{ company_data['confirmation_statement']['next_made_up_to'] }}</span>
+                    </li>
+
+                    <li class="row">
+                        <span class="col font-weight-bold">Last Made Up To</span>
+                        <span class="col">{{ company_data['confirmation_statement']['last_made_up_to'] }}</span>
+                    </li>
+                </ul>
+
+                <h4>Filing History</h4>
+                    <div class="col">
+                        <table class="table table-sm table-striped">
+                            <tr class="row">
+                                <th class="col">Filed</th>
+                                <th class="col">Made up to</th>
+                                <th class="col">Description</th>
+                            </tr>
+                            {% for item in conf_statement['items'] %}
+                            <tr class="row">
+                                <td class="col">{{item['date']}}</td>
+                                <td class="col">{{item['action_date']}}</td>
+                                <td class="col text-capitalize">
+                                    <a
+                                        target="_blank"
+                                        href="https://beta.companieshouse.gov.uk{{item['links']['self']}}/document?format=pdf&download=0"
+                                    >
+                                        {{item['description'].replace('-',' ')}}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-deck mt-5">
+
+        <div class="card shadow">
+            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
+                <h3 class="card-title">Company Officers</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for officer in officers['items'] %}
+                    <div class="mb-4">
+                        <li class="row">
+                            <span class="col font-weight-bold">Name</span>
+                            <span class="col">
+                                <a target="_blank" href="https://beta.companieshouse.gov.uk/{{officer['links']['officer']['appointments']}}">
+                                    {{ officer['name'] }}
+                                </a>
+                            </span>
+                        </li>
+                        <li class="row">
+                            <span class="col font-weight-bold">Company Role</span>
+                            <span class="col text-capitalize">{{ officer['officer_role'] }}</span>
+                        </li>
+                        <li class="row">
+                            <span class="col font-weight-bold">Appointed</span>
+                            <span class="col">{{ officer['appointed_on'] }}</span>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow">
             <div class="card-header text-light bg-primary">
                 <h3 class="card-title">Previous Names</h3>
             </div>
@@ -90,109 +229,6 @@
             </div>
         </div>
 
-        <div class="card shadow">
-            <div class="card-header text-light bg-primary {% if company_data['accounts']['overdue'] == True %}bg-danger{% endif %}">
-                <h3 class="card-title">Accounts</h3>
-            </div>
-            <div class="card-body">
-                <h4>Next Accounts</h4>
-                <ul class="list-unstyled">
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Next Due</span>
-                        <span class="col">{{ company_data['accounts']['next_due'] }}</span>
-                    </li>
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Next Made Up To</span>
-                        <span class="col">{{ company_data['accounts']['next_made_up_to'] }}</span>
-                    </li>
-                </ul>
-
-                <h4>Last Accounts</h4>
-                <ul class="list-unstyled">
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Period End</span>
-                        <span class="col">{{ company_data['accounts']['last_accounts']['period_end_on'] }}</span>
-                    </li>
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Period Start</span>
-                        <span class="col">{{ company_data['accounts']['last_accounts']['period_start_on'] }}</span>
-                    </li>
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Accounts Type</span>
-                        <span class="col">{{ company_data['accounts']['last_accounts']['type'] }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card shadow">
-            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
-                <h3 class="card-title">Confirmation Statement</h3>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Next Due</span>
-                        <span class="col">{{ company_data['confirmation_statement']['next_due'] }}</span>
-                    </li>
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Next Made Up To</span>
-                        <span class="col">{{ company_data['confirmation_statement']['next_made_up_to'] }}</span>
-                    </li>
-
-                    <li class="row">
-                        <span class="col font-weight-bold">Last Made Up To</span>
-                        <span class="col">{{ company_data['confirmation_statement']['last_made_up_to'] }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-deck mt-5">
-
-        <div class="card shadow">
-            <div class="card-header text-light bg-primary {% if company_data['confirmation_statement']['overdue'] == True %}bg-danger{% endif %}">
-                <h3 class="card-title">Company Officers</h3>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    {% for officer in officers['items'] %}
-                        <li class="row">
-                            <span class="col font-weight-bold">Name</span>
-                            <span class="col">{{ officer['name'] }}</span>
-                        </li>
-
-                        <li class="row">
-                            <span class="col font-weight-bold">Company Role</span>
-                            <span class="col text-capitalize">{{ officer['officer_role'] }}</span>
-                        </li>
-
-                        <li class="row">
-                            <span class="col font-weight-bold">Nationality</span>
-                            <span class="col text-capitalize">{{ officer['nationality'] }}</span>
-                        </li>
-
-                        <li class="row">
-                            <span class="col font-weight-bold">Occupation</span>
-                            <span class="col">{{ officer['occupation'] }}</span>
-                        </li>
-
-                        <li class="row">
-                            <span class="col font-weight-bold">Country of Residence</span>
-                            <span class="col">{{ officer['country_of_residence'] }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
     </div>
 
 {% endblock %}
