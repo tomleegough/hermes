@@ -16,3 +16,7 @@ Hermes is your favourite Grade 36 bureaucrat. It is also an accounting program w
    - Invoicing
  - Other
    - Make sure company is selected - URL decorator?
+
+
+Mini-balance sheet on dashboard. Force users to create categories before bank accounts, so equity account can be specified
+Some control accounts?

@@ -58,15 +58,20 @@
                             <option value="1">Receive</option>
                             <option value="-1">Spend</option>
                         </select>
-                    </div>
+                        </div>
                 </div>
 
+
+
                 <div class="form-group row">
-                    <label for="trans_value_net" class="col-md-4 col-form-label">Net Value</label>
+                    <label for="trans_value_net" class="col-md-4 col-form-label text-capitalize">
+                    {% if session['current_org_vat'] == 1 %}net{% endif %} Value
+                    </label>
                     <div class="col-md-8">
-                        <input id="trans_value_net" name="trans_value_net" value="" class="form-control" type="number" step="0.01" min="0.01">
+                        <input id="trans_value_net" name="trans_value_net" value="0.00" class="form-control" type="number" step="0.01" min="0.00">
                     </div>
                 </div>
+                {% if session['current_org_vat'] == 1 %}
 
                 <div class="form-group row">
                     <label for="trans_value_vat" class="col-md-4 col-form-label">Vat Value</label>
@@ -88,7 +93,7 @@
                         </select>
                     </div>
                 </div>
-
+                {% endif %}
                 <div class="form-group row">
                     <input
                             type="submit"

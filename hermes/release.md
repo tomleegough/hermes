@@ -2,6 +2,9 @@
 
 ## Version 1.1.1
 
+ALTER TABLE organisation
+ADD COLUMN org_vat_flag INTEGER; 
+
 ## Version 1.1.0 (VAT MTD)
 
 VAT MTD Sandbox Implementation

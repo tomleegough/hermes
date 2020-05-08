@@ -274,8 +274,10 @@ def create_organisation(form_data):
         '   org_enabled_flag,'
         '   org_vat,'
         '   org_number,'
-        '   org_type'
+        '   org_type,'
+        '   org_vat_flag'
         ' ) VALUES ('
+        '   ?,'
         '   ?,'
         '   ?,'
         '   ?,'
@@ -289,7 +291,8 @@ def create_organisation(form_data):
             form_data['org_enabled_flag'],
             form_data['org_vat'],
             form_data['org_no'],
-            form_data['org_type']
+            form_data['org_type'],
+            form_data['org_vat_flag'],
         )
     )
 

@@ -7,13 +7,7 @@
         <title>Hermes | {% block title %}{% endblock %}</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-        {% if session is defined and session != {}%}
-            <link rel="stylesheet" href="{{ url_for('static', filename='themes/' + session['theme']) }}">
-        {% elif theme in session %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='themes/' + session['theme']) }}">
-        {% else %}
             <link rel="stylesheet" href="{{ url_for('static', filename='themes/flatly.css') }}">
-        {% endif %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <!--        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">-->
         <link rel="stylesheet" href="{{ url_for('static', filename='font_awesome/css/all.css') }} ">
@@ -34,7 +28,6 @@
                     <i class="fas fa-plus-circle"></i>
                     Create
                 </a>
-
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_item', item='category') }}">Category</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_account') }}">Bank Account</a>
@@ -57,7 +50,12 @@
 
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_categories') }}">Categories</a>
-                    <a class="nav-link dropdown-item" href="{{ url_for('vat_mtd.vat_index') }}">VAT Returns</a>
+                    <a class="nav-link dropdown-item bg-warning text-white" href="{{ url_for('accounts.sales_dashboard') }}">Sales (Coming Soon!)</a>
+                    <a class="nav-link dropdown-item bg-warning text-white" href="{{ url_for('accounts.purchases_dashboard') }}">Purchases (Coming Soon!)</a>
+
+                    {% if session['current_org_vat'] == 1 %}
+                        <a class="nav-link dropdown-item" href="{{ url_for('vat_mtd.vat_index') }}">VAT Returns</a>
+                    {% endif %}
                 </div>
             </li>
 
@@ -67,7 +65,7 @@
                     Banking</a>
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_accounts') }}">Accounts</a>
-                    <div class="dropdown-divider"></div>
+                    <a class="nav-link dropdown-item bg-warning text-white" href="#">Import Statements (Coming Soon!)</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_transaction') }}">New Bank Transaction</a>
                 </div>
             </li>

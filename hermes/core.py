@@ -22,7 +22,7 @@ def index():
     income_chart = queries.income_chart()
 
     return render_template(
-        'core/dashboard.html',
+        'core/dashboards/dashboard.html',
         categories=values,
         accounts=accounts,
         income_chart=income_chart
@@ -56,6 +56,24 @@ def feedback():
 
     return render_template(
         'core/pages/feedback.html'
+    )
+
+
+@bp.route('/sales')
+@login_required
+def sales_dashboard():
+
+    return render_template(
+        'core/dashboards/sales.html'
+    )
+
+
+@bp.route('/purchases')
+@login_required
+def purchases_dashboard():
+
+    return render_template(
+        'core/dashboards/purchases.html'
     )
 
 ##### Banking Core Module
@@ -349,6 +367,7 @@ def change_org(org_id):
     session['current_org'] = org_id
     org_data = queries.get_org_by_id(org_id)
     session['current_org_name'] = org_data['org_name']
+    session['current_org_vat'] = org_data['org_vat_flag']
     return redirect(
         url_for('accounts.index')
     )

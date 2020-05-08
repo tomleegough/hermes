@@ -170,10 +170,10 @@ def login():
                 'SELECT * FROM user JOIN settings on user_id = user_id_fk WHERE user_id_fk=?',
                 (user['user_id'],)
             ).fetchone()
-            if theme['settings_theme'] is not None or theme['settings_theme'] != '':
-                session['theme'] = theme['settings_theme']
-            else:
-                session['theme'] = 'flatly.css'
+            # if theme['settings_theme'] is not None or theme['settings_theme'] != '':
+            #     session['theme'] = theme['settings_theme']
+            # else:
+            #     session['theme'] = 'flatly.css'
             session['group'] = user['user_group']
             return redirect(
                 url_for('index')
@@ -367,6 +367,7 @@ def update_orgs():
         session['orgs'].append(
             {
                 'org_id': org['org_id'],
-                'org_name': org['org_name']
+                'org_name': org['org_name'],
+                'org_vat_flag': org['org_vat_flag'],
             }
         )
