@@ -22,7 +22,8 @@ CREATE TABLE organisation (
     org_vat TEXT,
     org_enabled_flag INTEGER,
     org_type TEXT,
-    org_number TEXT
+    org_number TEXT,
+    org_vat_flag INTEGER
 );
 
 DROP TABLE IF EXISTS organisation_type;
@@ -109,7 +110,56 @@ CREATE TABLE global_settings(
     global_id TEXT,
     mj_api_key TEXT,
     mj_api_secret TEXT,
-    companies_house_api_key TEXT
+    companies_house_api_key TEXT,
+    mj_api_from_email
 );
 
 INSERT INTO global_settings (global_id) VALUES (1);
+
+DROP TABLE IF EXISTS contacts;
+CREATE TABLE contacts (
+    contact_id TEXT PRIMARY KEY,
+    contact_name TEXT,
+    contact_account_no TEXT UNIQUE,
+    contact_foreign_account_no TEXT,
+    contact_vat_registration TEXT,
+    contact_company_no TEXT,
+    contact_type TEXT,
+    contact_email TEXT,
+    contact_phone TEXT,
+    contact_main_contact TEXT,
+    contact_web_address TEXT,
+    org_id_fk TEXT
+);
+
+DROP TABLE IF EXISTS sales_invoices;
+CREATE TABLE sales_invoices (
+    sinv_id TEXT PRIMARY KEY,
+    sinv_number TEXT UNIQUE,
+    sinv_status TEXT,
+    sinv_date TEXT,
+    contact_id_fk TEXT,
+    org_id_fk TEXT
+);
+
+DROP TABLE IF EXISTS purchase_invoices;
+CREATE TABLE purchase_invoices (
+    pinv_id TEXT PRIMARY KEY,
+    pinv_number TEXT,
+    pinv_status TEXT,
+    pinv_date TEXT,
+    org_id_fk TEXT,
+    contact_id_fk TEXT
+);
+
+DROP TABLE IF EXISTS invoice_lines;
+CREATE TABLE invoice_lines (
+    invlines_id TEXT PRIMARY KEY,
+    category_id_fk TEXT,
+    invlines_description TEXT,
+    invlines_net REAL,
+    invlines_vat REAL,
+    invlines_gross REAL,
+    vat_type_id_fk TEXT,
+    inv_id_fk TEXT
+);

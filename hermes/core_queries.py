@@ -261,6 +261,15 @@ def get_active_orgs_for_current_user():
 
     return orgs
 
+def get_all_orgs():
+    db = get_db()
+
+    orgs = db.execute(
+        'SELECT * FROM organisation'
+    ).fetchall()
+
+    return orgs
+
 
 def create_organisation(form_data):
     db = get_db()
@@ -312,7 +321,7 @@ def get_organisation_types():
     org_types = db.execute(
         'SELECT *'
         ' FROM organisation_type'
-    )
+    ).fetchall()
 
     return org_types
 
@@ -503,6 +512,13 @@ def create_bank_account(form_data, org_id):
 def create_transaction(trans_data):
     db = get_db()
 
+    if 'trans_value_vat' not in trans_data:
+        vat_value = 0
+        vat_type_id_fk = ''
+    else:
+        vat_value = trans_data['trans_value_vat']
+        vat_type_id_fk = trans_data['vat_type_id_fk']
+
     db.execute(
         'INSERT INTO transactions ('
         '   trans_id,'
@@ -534,13 +550,13 @@ def create_transaction(trans_data):
             trans_data['trans_date'],
             datetime.datetime.now().strftime('%Y-%m-%d'),
             float(trans_data['trans_value_net']) * float(trans_data['sign']),
-            float(trans_data['trans_value_vat']) * float(trans_data['sign']),
+            float(vat_value) * float(trans_data['sign']),
             trans_data['trans_desc'],
             session['user_id'],
             session['current_org'],
             trans_data['bank_id'],
             trans_data['cat_id'],
-            trans_data['vat_type_id_fk'],
+            vat_type_id_fk,
         )
     )
 
@@ -1050,3 +1066,69 @@ def get_vat_transactions():
         '   cat_type_name,'
         '   vat_type_id_fk'
     ).fetchall()
+
+def get_all_contacts():
+    db = get_db()
+
+    contacts = db.execute(
+        'SELECT'
+        '  *'
+        ' FROM'
+        '   contacts'
+        ' WHERE'
+        '   org_id_fk = ?',
+        (
+            session['current_org'],
+        )
+    ).fetchall()
+
+    return contacts
+
+def create_contact(contact):
+    db = get_db()
+
+    db.execute(
+        'INSERT INTO contacts ('
+        '   contact_id,'
+        '   contact_name,'
+        '   contact_account_no,'
+        '   contact_foreign_account_no,'
+        '   contact_vat_registration,'
+        '   contact_company_no,'
+        '   contact_type,'
+        '   contact_email,'
+        '   contact_phone,'
+        '   contact_main_contact,'
+        '   contact_web_address,'
+        '   org_id_fk'
+        ' ) VALUES ('
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?,'
+        '   ?'
+        ' )',
+        (
+            str(uuid4()),
+            contact['contact_name'],
+            contact['contact_account_no'],
+            contact['contact_foreign_account_no'],
+            contact['contact_vat_registration'],
+            contact['contact_company_no'],
+            contact['contact_type'],
+            contact['contact_email'],
+            contact['contact_phone'],
+            contact['contact_main_contact'],
+            contact['contact_web_address'],
+            session['current_org'],
+        )
+    )
+
+    db.commit()

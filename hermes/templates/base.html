@@ -29,9 +29,10 @@
                     Create
                 </a>
                 <div class="dropdown-menu">
-                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_item', item='category') }}">Category</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_category') }}">Category</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_account') }}">Bank Account</a>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_transaction') }}">Bank Transaction</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_contact') }}">Contacts</a>
                 </div>
             </li>
 
@@ -50,8 +51,9 @@
 
                 <div class="dropdown-menu">
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_categories') }}">Categories</a>
-                    <a class="nav-link dropdown-item bg-warning text-white" href="{{ url_for('accounts.sales_dashboard') }}">Sales (Coming Soon!)</a>
-                    <a class="nav-link dropdown-item bg-warning text-white" href="{{ url_for('accounts.purchases_dashboard') }}">Purchases (Coming Soon!)</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.contacts_dashboard') }}">Contacts</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.sales_dashboard') }}">Sales</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.purchases_dashboard') }}">Purchases</a>
 
                     {% if session['current_org_vat'] == 1 %}
                         <a class="nav-link dropdown-item" href="{{ url_for('vat_mtd.vat_index') }}">VAT Returns</a>
@@ -80,7 +82,7 @@
                     {% endfor %}
                     <div class="dropdown-divider"></div>
                     <a class="nav-link dropdown-item" href="{{ url_for('accounts.show_organisations') }}">Manage</a>
-                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_item', item='organisation')}}">Create new</a>
+                    <a class="nav-link dropdown-item" href="{{ url_for('accounts.create_organisation')}}">Create new</a>
                 </div>
             </li>
 

@@ -11,7 +11,10 @@ import hermes.core_queries as queries
 bp = Blueprint('accounts', __name__)
 
 ##### Main route
-@bp.route('/')
+@bp.route(
+    '/',
+    methods=['GET']
+)
 @login_required
 def index():
     if 'current_org' not in session:
@@ -28,14 +31,20 @@ def index():
         income_chart=income_chart
     )
 
-@bp.route('/about')
+@bp.route(
+    '/about',
+    methods=['GET']
+)
 def about():
 
     return render_template(
         'core/pages/about.html'
     )
 
-@bp.route('/licence')
+@bp.route(
+    '/licence',
+    methods=['GET']
+)
 def licence():
 
     return render_template(
@@ -43,15 +52,21 @@ def licence():
     )
 
 
-@bp.route('/help')
+@bp.route(
+    '/help',
+    methods=['GET']
+)
 def help():
 
     return render_template(
         'core/pages/help.html'
     )
 
-@bp.route('/feedback')
-@login_required
+
+@bp.route(
+    '/feedback',
+    methods=['GET']
+)
 def feedback():
 
     return render_template(
@@ -59,7 +74,10 @@ def feedback():
     )
 
 
-@bp.route('/sales')
+@bp.route(
+    '/sales',
+    methods=['GET']
+)
 @login_required
 def sales_dashboard():
 
@@ -68,7 +86,10 @@ def sales_dashboard():
     )
 
 
-@bp.route('/purchases')
+@bp.route(
+    '/purchases',
+    methods=['GET']
+)
 @login_required
 def purchases_dashboard():
 
@@ -76,9 +97,27 @@ def purchases_dashboard():
         'core/dashboards/purchases.html'
     )
 
+
+@bp.route(
+    '/contacts',
+    methods=['GET']
+)
+@login_required
+def contacts_dashboard():
+
+    contacts = queries.get_all_contacts()
+
+    return render_template(
+        'core/dashboards/contacts.html',
+        contacts= contacts
+    )
+
 ##### Banking Core Module
 
-@bp.route('/accounts')
+@bp.route(
+    '/accounts',
+    methods=['GET']
+)
 @login_required
 def show_accounts():
     accounts = queries.get_bank_accounts_for_current_org()
@@ -88,15 +127,23 @@ def show_accounts():
     )
 
 
-@bp.route('/create/', methods=['POST', 'GET'])
+@bp.route(
+    '/create',
+    methods=['POST', 'GET']
+)
 @login_required
 def create_account():
 
     if request.method == 'POST':
+
+        if 'current_org' not in session:
+            flash('Please select an organisation')
+
         queries.create_bank_account(
             request.form,
             session['current_org']
         )
+
         return redirect(
             url_for('accounts.show_accounts')
         )
@@ -108,7 +155,10 @@ def create_account():
     )
 
 
-@bp.route('/edit/<bank_id>', methods=['POST', 'GET'])
+@bp.route(
+    '/edit/<bank_id>',
+    methods=['POST', 'GET']
+)
 @login_required
 def account(bank_id):
     account = queries.get_bank_account(bank_id)
@@ -126,7 +176,10 @@ def account(bank_id):
     )
 
 ##### Transactions
-@bp.route('/view/<category_id>/transactions')
+@bp.route(
+    '/view/<category_id>/transactions',
+    methods=['GET']
+)
 @login_required
 def view_transactions(category_id):
 
@@ -140,7 +193,10 @@ def view_transactions(category_id):
     )
 
 
-@bp.route('/create/transaction/', methods=['POST', 'GET'])
+@bp.route(
+    '/create/transaction/',
+    methods=['POST', 'GET']
+)
 @login_required
 def create_transaction():
     categories = queries.get_active_categories_for_current_org()
@@ -161,9 +217,32 @@ def create_transaction():
         vat_codes=vat_codes
     )
 
+
+##### contacts
+@bp.route(
+    '/contacts/create',
+    methods=['POST', 'GET']
+)
+@login_required
+def create_contact():
+
+    if request.method == 'POST':
+        queries.create_contact(request.form)
+        return redirect(
+            url_for('accounts.contacts_dashboard')
+        )
+
+    return render_template(
+        'core/forms/contact.html',
+        action='create'
+    )
+
 ##### Settings
 
-@bp.route('/categories')
+@bp.route(
+    '/categories',
+    methods=['GET']
+)
 @login_required
 def show_categories():
     categories = queries.get_all_categories_for_org()
@@ -173,7 +252,10 @@ def show_categories():
     )
 
 
-@bp.route('/settings', methods=['POST', 'GET'])
+@bp.route(
+    '/settings',
+    methods=['POST', 'GET']
+)
 @login_required
 def settings():
 
@@ -192,7 +274,10 @@ def settings():
     )
 
 
-@bp.route('/settings/global', methods=['POST', 'GET'])
+@bp.route(
+    '/settings/global',
+    methods=['POST', 'GET']
+)
 @login_required
 @group_admin
 def global_settings():
@@ -216,7 +301,10 @@ def global_settings():
     )
 
 
-@bp.route('/resetdemo')
+@bp.route(
+    '/resetdemo',
+    methods=['GET']
+)
 @login_required
 def reset_demo():
 
@@ -228,7 +316,10 @@ def reset_demo():
     )
 
 
-@bp.route('/<item>/change-status/<id>/<status_flag>')
+@bp.route(
+    '/<item>/change-status/<id>/<status_flag>',
+    methods=['GET']
+)
 @login_required
 def change_status(item, id, status_flag):
     if status_flag == '0':
@@ -249,47 +340,59 @@ def change_status(item, id, status_flag):
         )
 
 
-@bp.route('/<item>/create/', methods=['POST', 'GET'])
+@bp.route(
+    '/organisation/create',
+    methods=['POST', 'GET']
+)
 @login_required
-def create_item(item):
+def create_organisation():
     # TODO: Check that a site is selected before a category is created
-    if item == 'category':
-        cat_types = queries.get_category_types()
 
-        if request.method == 'POST':
-            if 'active_flag' not in request.form:
-                request.form['active_flag'] = 0
-            queries.create_category(request.form)
-            return redirect(
-                url_for('accounts.show_categories')
-            )
+    org_types = queries.get_organisation_types()
 
-        return render_template(
-            'core/forms/category.html',
-            category='',
-            cat_types= cat_types,
-            action='Create'
+    if request.method == 'POST':
+        queries.create_organisation(request.form)
+        update_orgs()
+        return redirect(
+            url_for('accounts.show_organisations')
         )
 
-    if item == 'organisation':
-        org_types = queries.get_organisation_types()
+    return render_template(
+        'core/forms/organisation.html',
+        org_types= org_types,
+        org='',
+        action='Create'
+    )
 
-        if request.method == 'POST':
-            queries.create_organisation(request.form)
-            update_orgs()
-            return redirect(
-                url_for('accounts.show_organisations')
-            )
+@bp.route(
+    '/category/create/',
+    methods=['POST', 'GET']
+)
+@login_required
+def create_category():
+    # TODO: Check that a site is selected before a category is created
+    cat_types = queries.get_category_types()
 
-        return render_template(
-            'core/forms/organisation.html',
-            org_types= org_types,
-            org='',
-            action='Create'
+    if request.method == 'POST':
+        if 'active_flag' not in request.form:
+            request.form['active_flag'] = 0
+        queries.create_category(request.form)
+        return redirect(
+            url_for('accounts.show_categories')
         )
 
+    return render_template(
+        'core/forms/category.html',
+        category='',
+        cat_types= cat_types,
+        action='Create'
+    )
 
-@bp.route('/category/<action>/<cat_id>', methods=['POST', 'GET'])
+
+@bp.route(
+    '/category/<action>/<cat_id>',
+    methods=['POST', 'GET']
+)
 @login_required
 def category(action, cat_id):
 
@@ -320,7 +423,10 @@ def category(action, cat_id):
     )
 
 
-@bp.route('/categories/<coa>')
+@bp.route(
+    '/categories/<coa>',
+    methods=['GET']
+)
 @login_required
 def create_default_categories(coa):
     queries.create_standard_coa(coa)
@@ -330,7 +436,10 @@ def create_default_categories(coa):
     )
 
 ##### Organisations
-@bp.route('/organisations')
+@bp.route(
+    '/organisations',
+    methods=['GET']
+)
 @login_required
 def show_organisations():
     organisations = queries.get_all_orgs_for_current_user()
@@ -340,7 +449,10 @@ def show_organisations():
     )
 
 
-@bp.route('/organisation/<action>/<org_id>', methods=['POST', 'GET'])
+@bp.route(
+    '/organisation/<action>/<org_id>',
+    methods=['POST', 'GET']
+)
 @login_required
 def organisation(action, org_id):
     org = queries.get_org_by_id(org_id)
@@ -361,7 +473,10 @@ def organisation(action, org_id):
     )
 
 
-@bp.route('/organisation/<org_id>')
+@bp.route(
+    '/organisation/change/<org_id>',
+    methods=['GET']
+)
 @login_required
 def change_org(org_id):
     session['current_org'] = org_id
@@ -373,7 +488,10 @@ def change_org(org_id):
     )
 
 
-@bp.route('/organisation/change_status/<org_id>')
+@bp.route(
+    '/organisation/change_status/<org_id>',
+    methods=['GET']
+)
 @login_required
 def change_org_status(org_id):
     queries.change_org_status(org_id)

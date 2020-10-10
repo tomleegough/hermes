@@ -75,6 +75,7 @@ def register():
         db = get_db()
         error = None
 
+
         if not username:
             error = 'Username is required.'
         elif not password:
@@ -220,15 +221,16 @@ def change_pass():
         old_pass = request.form['old_password']
         new_pass = request.form['new_password']
         conf_pass = request.form['confirm_password']
+        error = None
 
-        if new_pass != conf_pass:
-            error = 'Passwords do not match'
         if old_pass is None or new_pass is None or conf_pass is None:
             error = 'Password cannot be blank'
-        if not check_password_hash(old_pass, password):
+        elif new_pass != conf_pass:
+            error = 'Passwords do not match'
+        elif not check_password_hash(password, old_pass):
             error = 'Incorrect password.'
 
-        if error is not None:
+        if error is None:
             db.execute(
                 'UPDATE user'
                 ' SET user_pass = ?'
@@ -239,6 +241,8 @@ def change_pass():
             db.commit()
 
             return render_template('auth/success.html')
+
+        flash(error)
 
     return render_template('auth/change.html')
 
@@ -329,7 +333,6 @@ def reset_password():
             )
         ).fetchone()
 
-        password = user['user_pass']
         old_pass = request.form['old_password']
         new_pass = request.form['new_password']
         conf_pass = request.form['confirm_password']
@@ -338,7 +341,7 @@ def reset_password():
             error = 'Passwords do not match'
         if old_pass is None or new_pass is None or conf_pass is None:
             error = 'Password cannot be blank'
-        if not check_password_hash(old_pass, password):
+        if check_password_hash(user['user_pass'], old_pass):
             error = 'Incorrect password.'
 
         if error is not None:
